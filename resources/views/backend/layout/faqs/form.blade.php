@@ -20,7 +20,7 @@
         </div>
         <!-- end page title -->
 
-        <form method="post" action="{{ @$project ? route('backend.faq.update',['id' => @$faq->id]) : route('backend.faq.store')}}"
+        <form method="post" action="{{ @$faq ? route('backend.faq.update',['id' => @$faq->id]) : route('backend.faq.store')}}"
         class="row">
                 @csrf
                 <div class="col-lg-8">
@@ -30,22 +30,35 @@
                                                 <div class="col-lg-6">
                                                         <div class="mb-3">
                                                                 <label class="form-label" for="project-title-input">FAQ Question</label>
-                                                                <input type="text" class="form-control" id="project-title-input" placeholder="Enter project title">
+                                                                <input type="text" name="question"
+                                                                value="{{old('question', @$faq->question)}}"
+                                                                class="form-control @error('title') is-invalid @enderror" name="title"
+                                                                id="project-title-input" placeholder="Enter project title">
+                                                                @error('title')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                @enderror
                                                         </div>
                                                 </div>
                                                 <div class="col-lg-6">
                                                         <div class="mb-3 mb-lg-0">
-                                                        <label for="choices-priority-input" class="form-label">Priority</label>
-                                                        <input type="number" class="form-control">
+                                                                <label for="choices-priority-input" class="form-label">Priority</label>
+                                                                <input type="number" name="priority" 
+                                                                value="{{old('priority', @$faq->priority)}}"
+                                                                class="form-control @error('priority') is-invalid @enderror">
+                                                                @error('priority')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                @enderror
                                                         </div>
                                                 </div>
                                         </div>
                                         <div class="row">
                                                 <div class="mb-3">
                                                         <label class="form-label">FAQ Answer</label>
-                                                        <div id="ckeditor-classic">
-                                                        
-                                                        </div>
+                                                        <textarea name='answer' id="ckeditor-classic">{{old('answer', @$aq->answer)}}
+                                                        </textarea>
+                                                        @error('answer')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
                                                 </div>
                                         </div>
                                 </div>
@@ -65,30 +78,32 @@
                 <div class="col-lg-4">
                         <div class="card">
                                 <div class="card-header">
-                                        <h5 class="card-title mb-0">Privacy</h5>
+                                        <h5 class="card-title mb-0">Visibility</h5>
                                 </div>
                                 <div class="card-body">
                                         <div>
                                         <label for="choices-privacy-status-input" class="form-label">Status</label>
-                                        <select class="form-select" data-choices data-choices-search-false id="choices-privacy-status-input">
-                                                <option value="Private" selected>Private</option>
-                                                <option value="Team">Team</option>
-                                                <option value="Public">Public</option>
+                                        <select name="status"
+                                        class="form-select" data-choices data-choices-search-false id="choices-privacy-status-input">
+                                                <option value="" disabled selected>Select Option</option>
+                                                @foreach ($status as $key => $item)
+                                                        <option value="{{$item}}" {{old('status', @$faq->status) ? 'selected' : ''}}>{{$key}}</option>
+                                                @endforeach
                                         </select>
                                         </div>
                                 </div>
                                 <!-- end card body -->
                         </div>
                         <!-- end card -->
-                        <div class="card">
+                        {{-- <div class="card">
                                 <div class="card-header">
                                         <h5 class="card-title mb-0">Thumbnail</h5>
                                 </div>
                                 <div class="card-body">
-                                        {{-- <p class="text-muted">Add an image file here.</p> --}}
+                                        <p class="text-muted">Add an image file here.</p>
                                         <input type="file" name="image" class="dropify" data-height="200" />
                                 </div>
-                        </div>
+                        </div> --}}
                 </div>
                 <!-- end col -->
         </form>

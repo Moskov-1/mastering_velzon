@@ -9,7 +9,7 @@ class Faq extends Model
     protected $guarded = ['id'];
 
     const STATUS = [
-        'ACTIVE'=> '1',
         'INACTIVE'=> '0',
+        'ACTIVE'=> '1',
     ];
 }

@@ -75,7 +75,7 @@
                                 <div class="collapse menu-dropdown" id="sidebarTasks">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="apps-tasks-list-view.html" class="nav-link" data-key="t-list-view">
+                                            <a href="{{route('backend.faq.index')}}" class="nav-link" data-key="t-list-view">
                                                 List View 
                                             </a>
                                         </li>
