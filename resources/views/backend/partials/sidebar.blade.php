@@ -102,10 +102,7 @@
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarSignIn">
                                     <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="auth-signin-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                            </a>
-                                        </li>
+                                        
                                         <li class="nav-item">
                                             <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Cover
                                             </a>
@@ -118,10 +115,6 @@
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarSignUp">
                                     <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="auth-signup-basic.html" class="nav-link" data-key="t-basic"> Basic
-                                            </a>
-                                        </li>
                                         <li class="nav-item">
                                             <a href="auth-signup-cover.html" class="nav-link" data-key="t-cover"> Cover
                                             </a>
@@ -167,25 +160,8 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="#sidebarLockScreen" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLockScreen" data-key="t-lock-screen">
-                                    Lock Screen
-                                </a>
-                                <div class="collapse menu-dropdown" id="sidebarLockScreen">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="auth-lockscreen-basic.html" class="nav-link" data-key="t-basic">
-                                                Basic </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="auth-lockscreen-cover.html" class="nav-link" data-key="t-cover">
-                                                Cover </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#sidebarLogout" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLogout" data-key="t-logout"> Logout
+                                <a href="#sidebarLogout" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLogout" 
+                                data-key="t-logout"> Logout
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarLogout">
                                     <ul class="nav nav-sm flex-column">
@@ -200,8 +176,10 @@
                                     </ul>
                                 </div>
                             </li>
+
                             <li class="nav-item">
-                                <a href="#sidebarSuccessMsg" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSuccessMsg" data-key="t-success-message"> Success Message
+                                <a href="#sidebarSuccessMsg" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSuccessMsg" 
+                                data-key="t-success-message"> Success Message
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarSuccessMsg">
                                     <ul class="nav nav-sm flex-column">
@@ -217,7 +195,8 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarTwoStep" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTwoStep" data-key="t-two-step-verification"> Two Step Verification
+                                <a href="#sidebarTwoStep" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTwoStep" 
+                                data-key="t-two-step-verification"> Two Step Verification
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarTwoStep">
                                     <ul class="nav nav-sm flex-column">
