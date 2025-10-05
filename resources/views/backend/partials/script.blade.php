@@ -23,6 +23,7 @@
 <!--Swiper slider js-->
 <script src="{{asset('')}}assets/libs/swiper/swiper-bundle.min.js"></script>
 
+
 <!-- Dashboard init -->
 <script src="{{asset('')}}assets/js/pages/dashboard-ecommerce.init.js"></script>
 
@@ -35,7 +36,14 @@
         // Initialize Dropify
 
         // Optional events
-        let drEvent = $('.dropify').dropify();
+        let drEvent = $('.dropify').dropify({
+            messages: {
+                'default': 'Drag and drop a file',
+                'replace': 'Drag and drop or click to replace',
+                'remove':  'Remove file',
+                'error':   'Oops, something wrong happened.'
+            }
+        });
 
         drEvent.on('dropify.beforeClear', function(event, element){
             return confirm("Do you really want to delete \"" + element.file.name + "\" ?");

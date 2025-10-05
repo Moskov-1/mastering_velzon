@@ -80,7 +80,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="apps-tasks-details.html" class="nav-link" data-key="t-task-details"> Create FAQ </a>
+                                            <a href="{{route('backend.faq.create')}}" class="nav-link" data-key="t-task-details"> Create FAQ </a>
                                         </li>
                                     </ul>
                                 </div>

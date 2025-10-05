@@ -10,7 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
+    @stack('styles-top')
     @include('backend.partials.style')
+    @stack('styles-bottom')
+
 </head>
 
 <body>
@@ -41,9 +44,10 @@
         <!-- end main content-->
 
     </div>
+    @stack('scripts-top')
     <!-- END layout-wrapper -->
     @include('backend.partials.script')
-    @stack('scripts')
+    @stack('scripts-bottom')
 </body>
 
 
