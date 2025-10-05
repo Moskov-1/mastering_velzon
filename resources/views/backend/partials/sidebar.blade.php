@@ -56,11 +56,13 @@
                                 <div class="collapse menu-dropdown" id="sidebarProjects">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="apps-projects-list.html" class="nav-link" data-key="t-list"> List
+                                            <a href="#" class="nav-link" data-key="t-list"> List
+                                            {{-- <a href="{{route('backend.project.index')}}" class="nav-link" data-key="t-list"> List --}}
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{route('category.create')}}" class="nav-link" data-key="t-create-project"> Create Project </a>
+                                            {{-- <a href="{{route('backend.project.create')}}" class="nav-link" data-key="t-create-project"> Create Project </a> --}}
+                                            <a href="#" class="nav-link" data-key="t-create-project"> Create Project </a>
                                         </li>
                                     </ul>
                                 </div>

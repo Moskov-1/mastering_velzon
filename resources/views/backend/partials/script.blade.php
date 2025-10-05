@@ -33,7 +33,6 @@
 <script>
     $(document).ready(function(){
         // Initialize Dropify
-        // $('.dropify').dropify();
 
         // Optional events
         let drEvent = $('.dropify').dropify();
