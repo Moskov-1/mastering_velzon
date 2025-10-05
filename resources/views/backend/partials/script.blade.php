@@ -1,4 +1,10 @@
 <!-- JAVASCRIPT -->
+<!-- jQuery (required) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Dropify JS -->
+<script src="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/js/dropify.min.js"></script>
+
 <script src="{{asset('')}}assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="{{asset('')}}assets/libs/simplebar/simplebar.min.js"></script>
 <script src="{{asset('')}}assets/libs/node-waves/waves.min.js"></script>
@@ -24,16 +30,10 @@
 <script src="{{asset('')}}assets/js/app.js"></script>
 
 
-<!-- jQuery (required) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Dropify JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropify/0.2.2/js/dropify.min.js"></script>
-
 <script>
     $(document).ready(function(){
         // Initialize Dropify
-        $('.dropify').dropify();
+        // $('.dropify').dropify();
 
         // Optional events
         let drEvent = $('.dropify').dropify();

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index(){
+    public function create(){
 
         return view("backend.layout.categories.form");
     }

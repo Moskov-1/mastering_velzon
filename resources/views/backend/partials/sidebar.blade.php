@@ -60,7 +60,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="apps-projects-create.html" class="nav-link" data-key="t-create-project"> Create Project </a>
+                                            <a href="{{route('category.create')}}" class="nav-link" data-key="t-create-project"> Create Project </a>
                                         </li>
                                     </ul>
                                 </div>
