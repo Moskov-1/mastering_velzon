@@ -12,7 +12,10 @@
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"> --}}
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.min.css"> --}}
 
+    <!-- yajra datatable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    
     <!-- Layout config Js -->
     <script src="{{asset('')}}assets/js/layout.js"></script>
     <!-- Bootstrap Css -->

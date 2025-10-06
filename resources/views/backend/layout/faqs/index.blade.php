@@ -57,24 +57,13 @@
 @endpush
 @push('scripts-bottom')
 
-    <!-- Yajra Datatable -->
-    {{-- <script src="{{ asset('assets/js/pages/plugins/dataTables.bootstrap5.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/plugins/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/plugins/jquery.dataTables.min.js') }}"></script> --}}
-
-    <!-- DataTables Bootstrap 5 CSS -->
-
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> --}}
-
     <script>
     (function($){
         $(function () {
             $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
                 ajax: "{{ route('backend.faq.index') }}",
                 columns: [
                     {data: 'id', name: 'id'},
@@ -88,7 +77,7 @@
         });
     })(jQuery);
 
-    // Example JS handlers
+
     function editFaq(id) {
         window.location.href = "/admin/faq/" + id + "/edit";
     }
