@@ -15,11 +15,14 @@ class admin
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        if(auth()->check() && auth()->user()->role == User::ROLES['ADMIN']) {
+    {   
+        // dd($request->user());
+        if(auth()->check() && auth()->user()->role == User::roles()['ADMIN']) {
             return $next($request);
         }
-
-        return redirect()->route('login');
+        $error = 'Credentials don\'t match';
+        if(auth()->user()?->role == User::roles()['ADMIN']) 
+            $error = 'User is not an admin';
+        return redirect()->route('auth.login.get')->with('error',$error);
     }
 }

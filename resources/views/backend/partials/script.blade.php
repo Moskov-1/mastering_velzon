@@ -60,3 +60,26 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function(){
+        const logoutBtn = document.getElementById('logout-button');
+        logoutBtn.style.cursor = "pointer";
+
+        $('#logout-button').on('click', function(){
+            fetch("{{route('auth.logout.post')}}",
+            {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{csrf_token()}}",
+                    "Accept": 'application/json'
+                }   
+            }).then(response => {
+                if(response.ok){
+                    window.location.href = "{{route('auth.login.get')}}";
+                }
+            });
+        });
+    });
+
+</script>

@@ -86,10 +86,16 @@
                                         <div class="mt-4">
                                             @yield('content')
                                         </div>
-
-                                        <div class="mt-5 text-center">
-                                            <p class="mb-0">Don't have an account ? <a href="auth-signup-cover.html" class="fw-semibold text-primary text-decoration-underline"> Signup</a> </p>
-                                        </div>
+                                        @if (Route::is('auth.login.get'))
+                                        
+                                            <div class="mt-5 text-center">
+                                                <p class="mb-0">Don't have an account ? <a href="{{route('auth.signup.get')}}" class="fw-semibold text-primary text-decoration-underline"> Signup</a> </p>
+                                            </div>
+                                        @else
+                                            <div class="mt-5 text-center">
+                                                <p class="mb-0">Already have an account ? <a href="{{route('auth.login.get')}}" class="fw-semibold text-primary text-decoration-underline"> login</a> </p>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <!-- end col -->

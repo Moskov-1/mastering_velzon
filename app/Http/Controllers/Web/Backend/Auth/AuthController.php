@@ -27,17 +27,19 @@ class AuthController extends Controller
     }
 
     public function getLogin(){
-        return view("backend.layout.auth.signup");
+        return view("backend.layout.auth.login");
     }
 
     public function login(Request $request){
+
+        // dd($request->all());
         $request->validate([
             "email"=> "required|email|exists:users,email",
             "password"=> "required"
         ]);
 
          if( Auth::attempt(['email' => $request->email,'password'=> $request->password]) ){
-            return redirect()->route('backend.index')->with("success","registration completed successfully");
+            return redirect()->route('backend.index')->with("success","login completed successfully");
         }
         return back()->with(
             'error', 'Invalid credentials provided.'

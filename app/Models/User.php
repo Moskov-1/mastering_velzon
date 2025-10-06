@@ -24,10 +24,12 @@ class User extends Authenticatable
         'password',
     ];
 
-    const ROLES = [
-        'ADMIN' => env('DEFAULT_ADMIN_ROLE', 'admin'),
-        'USER' => env('DEFAULT_USER_ROLE', 'user')
-    ];
+    public static function roles(){
+        return [
+            'ADMIN' => env('DEFAULT_ADMIN_ROLE', 'admin'),
+            'USER' => env('DEFAULT_USER_ROLE', 'user')
+        ];
+    } 
 
     /**
      * The attributes that should be hidden for serialization.
