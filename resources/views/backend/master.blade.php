@@ -48,6 +48,8 @@
     <!-- END layout-wrapper -->
     @include('backend.partials.script')
     @stack('scripts-bottom')
+    @include('backend.partials.notifications')
+
 </body>
 
 

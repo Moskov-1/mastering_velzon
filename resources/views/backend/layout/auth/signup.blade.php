@@ -1,34 +1,56 @@
 @extends('backend.layout.auth.auth-app')
 @section('title', 'Sign Up | admin')
 @section('content')
-    <form class="needs-validation" novalidate action="https://themesbrand.com/velzon/html/default/index.html">
+    <form class="needs-validation" novalidate method="post" action="{{route('auth.signup.post')}}">
 
         <div class="mb-3">
             <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
-            <input type="email" class="form-control" id="useremail" placeholder="Enter email address" required>
+            <input type="email" class="form-control" id="useremail" 
+                name="email"
+            placeholder="Enter email address" required>
             <div class="invalid-feedback">
                 Please enter email
             </div>
         </div>
         <div class="mb-3">
-            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="username" placeholder="Enter username" required>
+            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="username" 
+                name="name"
+            placeholder="Enter username" required>
             <div class="invalid-feedback">
                 Please enter username
             </div>
         </div>
-
+        @csrf
         <div class="mb-3">
             <label class="form-label" for="password-input">Password</label>
             <div class="position-relative auth-pass-inputgroup">
-                <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                <input type="password" class="form-control pe-5 password-input" 
+                name="password"
+                onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" 
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                <div class="invalid-feedback">
+                    Please enter password
+                </div>
+            </div>
+            @error('password')
+                <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="password-input">Confirm Password</label>
+            <div class="position-relative auth-pass-inputgroup">
+                <input type="password" class="form-control pe-5 password-input" 
+                name="password_confirmation"
+                onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" 
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                 <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                 <div class="invalid-feedback">
                     Please enter password
                 </div>
             </div>
         </div>
-
         <div class="mb-4">
             <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Velzon <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
         </div>

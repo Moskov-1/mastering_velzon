@@ -23,8 +23,6 @@
 <!--Swiper slider js--> 
 <script src="{{asset('')}}assets/libs/swiper/swiper-bundle.min.js"></script>
 
-<!--Swiper sweet alert 2 js-->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Dashboard init -->
 <script src="{{asset('')}}assets/js/pages/dashboard-ecommerce.init.js"></script>
 
@@ -62,46 +60,3 @@
         });
     });
 </script>
-
-@if(session('success'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: '{{ session('success') }}',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-</script>
-@endif
-
-@if(session('error'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: '{{ session('error') }}',
-        showConfirmButton: false,
-        timer: 3000
-    });
-</script>
-@endif
-
-@if (@$errors->any())
-<script>
-    @foreach ($errors->all() as $error)
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'error',
-            title: '{{ $error }}',
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true
-        });
-    @endforeach
-</script>
-@endif

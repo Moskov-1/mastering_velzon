@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web\Backend\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SignUpRequest;
 
 class AuthController extends Controller
 {
@@ -11,7 +13,10 @@ class AuthController extends Controller
         return view("backend.layout.auth.signup");
     }
 
-    public function signup(Request $request){
+    public function signup(SignUpRequest $request){
+        
+        $user = User::create($request->validated());
+        dd($user);
         
     }
 

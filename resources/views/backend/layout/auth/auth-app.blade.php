@@ -135,5 +135,7 @@
 
     <!-- password-addon init -->
     <script src="{{asset('assets/js/pages/password-addon.init.js')}}"></script>
+    @include('backend.partials.notifications')
+
 </body>
 </html>
