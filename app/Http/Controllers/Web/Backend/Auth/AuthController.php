@@ -47,6 +47,24 @@ class AuthController extends Controller
 
     }
 
+    public function getResetPasswordForm(){
+        return view('backend.layout.auth.reset-password');
+    }
+
+    public function resetPassword(Request $request){
+        $request->validate([
+            'curr_password' => 'required',
+            "password"=> ['required', 'string', 'min:6', 'max:8',
+                // 'regex:/[0-9]/', 'regex:/[A-Z]/', 'regex:/[a-z]/', 
+                'confirmed'],
+        ]);
+        $user = User::findOrFail( auth()->user()->id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return back()->with('success','password changed successfully');
+    }
+
     public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();

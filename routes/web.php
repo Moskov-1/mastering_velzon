@@ -18,7 +18,14 @@ Route::group(['as'=> 'auth.'], function () {
     Route::get('login', [AuthController::class,'getLogin'])->name('login.get');
     Route::post('login', [AuthController::class,'login'])->name('login.post');
 
-    Route::post('logout', [AuthController::class,'logout'])->name('logout.post')->middleware('admin.auth');
+    Route::group(['middleware'=> 'admin.auth'], function () {
+
+        Route::post('logout', [AuthController::class,'logout'])->name('logout.post');
+        Route::get('reset-password', [AuthController::class,'getResetPasswordForm'])->name('reset.get');
+        Route::post('reset-password', [AuthController::class,'resetPassword'])->name('reset.post');
+
+    });
+
 });
 
 Route::group(['prefix'=> 'admin', 'as'=>'backend.', 'middleware'=> ['admin.auth']], function () {
