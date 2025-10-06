@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -16,11 +17,40 @@ class AuthController extends Controller
     public function signup(SignUpRequest $request){
         
         $user = User::create($request->validated());
-        
-        return redirect()->route('backend.index')->with("success","registration completed successfully");
+
+        if( Auth::attempt(['email' => $request->email,'password'=> $request->password]) ){
+            return redirect()->route('backend.index')->with("success","registration completed successfully");
+        }
+        return back()->with(
+            'error', 'Invalid credentials provided.'
+        );
     }
 
     public function getLogin(){
-        // return view("");
+        return view("backend.layout.auth.signup");
     }
+
+    public function login(Request $request){
+        $request->validate([
+            "email"=> "required|email|exists:users,email",
+            "password"=> "required"
+        ]);
+
+         if( Auth::attempt(['email' => $request->email,'password'=> $request->password]) ){
+            return redirect()->route('backend.index')->with("success","registration completed successfully");
+        }
+        return back()->with(
+            'error', 'Invalid credentials provided.'
+        );
+
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
+
 }
