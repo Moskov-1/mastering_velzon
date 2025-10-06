@@ -16,8 +16,8 @@ class AuthController extends Controller
     public function signup(SignUpRequest $request){
         
         $user = User::create($request->validated());
-        dd($user);
         
+        return redirect()->route('backend.index')->with("success","registration completed successfully");
     }
 
     public function getLogin(){
