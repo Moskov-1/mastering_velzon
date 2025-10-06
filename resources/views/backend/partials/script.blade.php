@@ -28,6 +28,11 @@
 <!-- Dashboard init -->
 <script src="{{asset('')}}assets/js/pages/dashboard-ecommerce.init.js"></script>
 
+
+<!-- DataTables with Bootstrap 5 -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
 <!-- App js -->
 <script src="{{asset('')}}assets/js/app.js"></script>
 

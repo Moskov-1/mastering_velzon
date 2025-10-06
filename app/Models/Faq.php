@@ -11,5 +11,6 @@ class Faq extends Model
     const STATUS = [
         'INACTIVE'=> '0',
         'ACTIVE'=> '1',
+        'PENDING'=> '2',
     ];
 }

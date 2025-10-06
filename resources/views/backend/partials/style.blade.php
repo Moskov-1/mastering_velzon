@@ -8,8 +8,11 @@
     <!--Swiper slider css-->
     <link href="{{asset('')}}assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/css/dropify.min.css" />
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.min.css"> --}}
 
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- Layout config Js -->
     <script src="{{asset('')}}assets/js/layout.js"></script>
     <!-- Bootstrap Css -->
@@ -20,4 +23,11 @@
     <link href="{{asset('')}}assets/css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="{{asset('')}}assets/css/custom.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/css/dropify.min.css" />
+
+    <style>
+        .data-table th,
+        .data-table td {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+    </style>

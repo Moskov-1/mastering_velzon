@@ -17,22 +17,15 @@
                 <!--end card-body-->
                 <div class="card-body">
                     <div class="table-responsive table-card mb-4">
-                        <table class="table align-middle table-nowrap mb-0" id="tasksTable">
+                        <table class="table align-middle table-nowrap data-table table-striped mb-0" id="faq-table">
                             <thead class="table-light text-muted">
                                 <tr>
-                                    <th scope="col" style="width: 40px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                        </div>
-                                    </th>
-                                    <th class="sort" data-sort="id">ID</th>
-                                    <th class="sort" data-sort="project_name">Project</th>
-                                    <th class="sort" data-sort="tasks_name">Task</th>
-                                    <th class="sort" data-sort="client_name">Client Name</th>
-                                    <th class="sort" data-sort="assignedto">Assigned To</th>
-                                    <th class="sort" data-sort="due_date">Due Date</th>
-                                    <th class="sort" data-sort="status">Status</th>
-                                    <th class="sort" data-sort="priority">Priority</th>
+                                    <th class="wd-15p border-bottom-0">ID</th>
+                                    <th class="wd-15p border-bottom-0">Question</th>
+                                    <th class="wd-15p border-bottom-0">Question</th>
+                                    <th class="wd-15p border-bottom-0">Priority</th>
+                                    <th class="wd-15p border-bottom-0">Status</th>
+                                    <th class="wd-15p border-bottom-0">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all">
@@ -42,21 +35,11 @@
                         <!--end table-->
                         <div class="noresult" style="display: none">
                             <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" 
+                                style="width:75px;height:75px"></lord-icon>
                                 <h5 class="mt-2">Sorry! No Result Found</h5>
                                 <p class="text-muted mb-0">We've searched more than 200k+ tasks We did not find any tasks for you search.</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-2">
-                        <div class="pagination-wrap hstack gap-2">
-                            <a class="page-item pagination-prev disabled" href="#">
-                                Previous
-                            </a>
-                            <ul class="pagination listjs-pagination mb-0"></ul>
-                            <a class="page-item pagination-next" href="#">
-                                Next
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -68,3 +51,59 @@
     </div>
     <!--end row-->
 @endsection
+
+@push('scripts-top')
+
+@endpush
+@push('scripts-bottom')
+
+    <!-- Yajra Datatable -->
+    {{-- <script src="{{ asset('assets/js/pages/plugins/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/plugins/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/plugins/jquery.dataTables.min.js') }}"></script> --}}
+
+    <!-- DataTables Bootstrap 5 CSS -->
+
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script> --}}
+
+    <script>
+    (function($){
+        $(function () {
+            $('.data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('backend.faq.index') }}",
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'question', name: 'question'},
+                    {data: 'answer', name: 'answer'},
+                    {data: 'priority', name: 'priority'},
+                    {data: 'status', name: 'status', orderable: false, searchable: false},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
+        });
+    })(jQuery);
+
+    // Example JS handlers
+    function editFaq(id) {
+        window.location.href = "/admin/faq/" + id + "/edit";
+    }
+
+    function deleteData(url) {
+        if(confirm("Are you sure you want to delete this FAQ?")) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: {_token: "{{ csrf_token() }}"},
+                success: function () {
+                    $('.data-table').DataTable().ajax.reload();
+                }
+            });
+        }
+    }
+    </script>
+@endpush
