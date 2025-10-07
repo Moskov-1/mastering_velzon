@@ -4,6 +4,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
     //! File or Image Upload
+
+    function fileUpdate($file, string $folder, string $old = null, $option = null){
+        if($old){
+            fileDelete($old);
+        }
+        return fileUpload($file,  $folder, $option);
+    }
     function fileUpload($file, string $folder, string $option = null): ?string
     {
         if (!$file->isValid()) {

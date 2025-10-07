@@ -20,7 +20,7 @@ class ProfileController extends Controller
         try{
 
             $validator = Validator::make($request->all(), [
-                'avatar' => 'required'
+                'avatar' => 'required|mimes:png,jpg,jpeg,ico|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         try{
 
             $validator = Validator::make($request->all(), [
-                'banner' => 'required'
+                'banner' => 'required|mimes:png,jpg,jpeg,ico|max:2048'
             ]);
 
             if ($validator->fails()) {
