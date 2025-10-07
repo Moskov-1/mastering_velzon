@@ -3,7 +3,7 @@
 
     <div class="position-relative mx-n4 mt-n4">
         <div class="profile-wid-bg profile-setting-img">
-            <img src="{{asset('')}}assets/images/profile-bg.jpg" class="profile-wid-img" alt="">
+            <img src="{{ $profile->banner ? asset($profile->banner) : asset('assets/images/profile-bg.jpg')}}" class="profile-wid-img" alt="">
             <div class="overlay-content">
                 <div class="text-end p-3">
                     <div class="p-0 ms-auto rounded-circle profile-photo-edit">
@@ -23,9 +23,9 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="{{asset('')}}assets/images/users/avatar-1.jpg" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                            <img src="{{$profile->avatar ? asset($profile->avatar) : asset('assets/images/users/avatar-1.jpg')}}" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                <input id="profile-img-file-input" type="file" class="profile-img-file-input">
+                                <input id="profile-img-file-input" type="file" class="profile-img-file-input avatar-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-camera-fill"></i>
@@ -367,3 +367,65 @@
         <!--end col-->
     </div>
 @endsection
+
+@push('scripts-bottom')
+<script>
+    $(document).ready(
+        function(){
+            $('.avatar-input').on('change', function(){
+                console.log('ggs')
+                const formData = new FormData();
+                formData.append('avatar', $(this)[0].files[0]);
+                formData.append('_token', "{{csrf_token()}}");
+                formData.append('profile_id', "{{$profile->id}}")
+                
+                $.ajax({
+                    url : "{{route('backend.settings.profile.avatar.upload')}}",
+                    method: "POST",
+                    data : formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response){
+                        if(response.success){
+                            $('.user-profile-image').attr('src', response.url);   
+                        }
+                        else{
+                            
+                        }
+                    }
+                });
+            });
+        }
+    );
+</script>
+
+<script>
+    $(document).ready(
+        function(){
+            $('.profile-foreground-img-file-input').on('change', function(){
+                console.log('banner')
+                const formData = new FormData();
+                formData.append('banner', $(this)[0].files[0]);
+                formData.append('_token', "{{csrf_token()}}");
+                formData.append('profile_id', "{{$profile->id}}")
+                
+                $.ajax({
+                    url : "{{route('backend.settings.profile.banner.upload')}}",
+                    method: "POST",
+                    data : formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response){
+                        if(response.success){
+                            $('.profile-wid-img').attr('src', response.url);   
+                        }
+                        else{
+                            
+                        }
+                    }
+                });
+            });
+        }
+    );
+</script>
+@endpush

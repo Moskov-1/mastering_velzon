@@ -17,6 +17,16 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->profile()->create([
+                'user_id' => $user->id
+            ]);
+        });
+    }
+    
     protected $fillable = [
         'name',
         'email',
@@ -52,5 +62,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    public function profile(){
+        return $this->hasOne(Profile::class);
     }
 }
