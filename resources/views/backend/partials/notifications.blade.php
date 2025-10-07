@@ -41,3 +41,28 @@
     @endforeach
 </script>
 @endif
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let html = document.documentElement; // <html>
+        // Load saved mode
+        let savedMode = localStorage.getItem("layout-mode");
+        if (savedMode) {
+            html.setAttribute("data-layout-mode", savedMode);
+        }
+
+        // Toggle on click
+        let toggleBtn = document.querySelector(".light-dark-mode");
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", function () {
+
+                let current = html.getAttribute("data-layout-mode");
+                console.log(current)
+                let newMode = current === "dark" ? "dark" : "light";
+                console.log(current)
+                html.setAttribute("data-layout-mode", newMode);
+                localStorage.setItem("layout-mode", newMode);
+            });
+        }
+    });
+</script>

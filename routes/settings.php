@@ -9,4 +9,6 @@ Route::group(["prefix"=> "settings", "as"=> "settings."], function () {
         Route::post('upload-avatar','avatar')->name('avatar.upload');
         Route::post('upload-banner','banner')->name('banner.upload');
     });
+
+    
 });
