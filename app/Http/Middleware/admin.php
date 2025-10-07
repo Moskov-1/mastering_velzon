@@ -20,8 +20,8 @@ class admin
         if(auth()->check() && auth()->user()->role == User::roles()['ADMIN']) {
             return $next($request);
         }
-        $error = 'Credentials don\'t match';
-        if(auth()->user()?->role == User::roles()['ADMIN']) 
+        $error = 'Credentials don\'t match.';
+        if(User::where('email', $request->email)->first()?->role != User::roles()['ADMIN']) 
             $error = 'User is not an admin';
         return redirect()->route('auth.login.get')->with('error',$error);
     }
