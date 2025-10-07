@@ -312,10 +312,10 @@
                                 <a href="{{route('backend.settings.system.index')}}" class="nav-link" data-key="t-level-1.1"> System Settings </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> Admin Settings </a>
+                                <a href="{{route('backend.settings.mail.index')}}" class="nav-link" data-key="t-level-1.1">  Mail Settings</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> Mail Settings </a>
+                                <a href="#" class="nav-link" data-key="t-level-1.1">Admin Settings</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAccount" data-key="t-level-1.2"> Level
