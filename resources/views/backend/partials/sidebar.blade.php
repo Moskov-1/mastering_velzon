@@ -309,7 +309,7 @@
                                 <a href="{{route('backend.settings.profile.index')}}" class="nav-link" data-key="t-level-1.1"> Profile Settings </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> System Settings </a>
+                                <a href="{{route('backend.settings.system.index')}}" class="nav-link" data-key="t-level-1.1"> System Settings </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link" data-key="t-level-1.1"> Admin Settings </a>

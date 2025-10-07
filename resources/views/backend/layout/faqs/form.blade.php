@@ -123,7 +123,7 @@
 @push('scripts-top')
 
 <!-- ckeditor -->
-<script src="{{asset('')}}assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+<script src="{{asset('assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js')}}"></script>
 
 <!-- project-create init -->
 <script src="{{asset('')}}assets/js/pages/project-create.init.js"></script>

@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 class SystemController extends Controller
 {
     public function index(){
-        view('');
+        return view('backend.layout.settings.system');
+    }
+
+    public function update(Request $request){
+        
     }
 }
