@@ -16,10 +16,10 @@
             </div>
             <label class="form-label" for="password-input">Password</label>
             <div class="position-relative auth-pass-inputgroup mb-3">
-                <input type="password" class="form-control pe-5" id="password-input"
+                <input type="password" class="form-control pe-5 password-input" id="password-input"
                     name="password"
                  placeholder="Enter password">
-                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
             </div>
         </div>
 
@@ -47,3 +47,9 @@
 
     </form>
 @endsection
+
+
+@push('srcipts-bottom')
+    <!-- password-custom logi -->
+    <script src="{{asset('')}}assets/js/raihan/password-toggle.js"></script>
+@endpush

@@ -81,3 +81,9 @@
         </div>
     </form>
 @endsection
+@push('srcipts-bottom')
+    <!-- password-create init -->
+    <script src="{{asset('')}}assets/js/pages/passowrd-create.init.js"></script>
+    <!-- password-addon init -->
+    <script src="{{asset('assets/js/pages/password-addon.init.js')}}"></script>
+@endpush
