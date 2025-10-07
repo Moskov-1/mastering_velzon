@@ -99,10 +99,10 @@ class ProfileController extends Controller
         }
         catch(\Exception $e){
             return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong.',
-            'error'   => $e->getMessage(), 
-        ], 500);
+                'success' => false,
+                'message' => 'Something went wrong.',
+                'error'   => $e->getMessage(), 
+            ], 500);
         }
 
 

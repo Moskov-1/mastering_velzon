@@ -5,6 +5,9 @@
 <!-- Dropify JS -->
 <script src="https://cdn.jsdelivr.net/npm/dropify@0.2.2/dist/js/dropify.min.js"></script>
 
+<!--Swiper sweet alert 2 js-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="{{asset('')}}assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="{{asset('')}}assets/libs/simplebar/simplebar.min.js"></script>
 <script src="{{asset('')}}assets/libs/node-waves/waves.min.js"></script>

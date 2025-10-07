@@ -388,10 +388,38 @@
                     success: function(response){
                         if(response.success){
                             $('.user-profile-image').attr('src', response.url);   
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",   // top-end, top-start, bottom-end, bottom-start
+                                icon: "success",
+                                title: response.message || "Profile updated successfully",
+                                showConfirmButton: false,
+                                timer: 3000,          
+                                timerProgressBar: true
+                            });
                         }
                         else{
-                            
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",
+                                icon: "error",
+                                title: response.message || "Something went wrong",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
                         }
+                    },
+                    error: function(xhr){
+                        let response = xhr.responseJSON;
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            icon: "error",
+                            title: response?.message || "Server Error",
+                            text: response?.error || "Something went wrong",
+                            showConfirmButton: true
+                        });
                     }
                 });
             });
@@ -418,10 +446,38 @@
                     success: function(response){
                         if(response.success){
                             $('.profile-wid-img').attr('src', response.url);   
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",   // top-end, top-start, bottom-end, bottom-start
+                                icon: "success",
+                                title: response.message || "Profile updated successfully",
+                                showConfirmButton: false,
+                                timer: 3000,          
+                                timerProgressBar: true
+                            });
                         }
                         else{
-                            
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",
+                                icon: "error",
+                                title: response.message || "Something went wrong",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            }); 
                         }
+                    },
+                    error: function(xhr){
+                        let response = xhr.responseJSON;
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            icon: "error",
+                            title: response?.message || "Server Error",
+                            text: response?.error || "Something went wrong",
+                            showConfirmButton: true
+                        });
                     }
                 });
             });
