@@ -301,12 +301,21 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
-                        <i class="ri-share-line"></i> <span data-key="t-multi-level">Multi Level</span>
+                        <i class="ri-share-line"></i> <span data-key="t-multi-level">Settings</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-key="t-level-1.1"> Level 1.1 </a>
+                                <a href="{{route('backend.settings.profile.index')}}" class="nav-link" data-key="t-level-1.1"> Profile Settings </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-level-1.1"> System Settings </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-level-1.1"> Admin Settings </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" data-key="t-level-1.1"> Mail Settings </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarAccount" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAccount" data-key="t-level-1.2"> Level
