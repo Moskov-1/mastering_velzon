@@ -35,7 +35,7 @@
                                 </label>
                             </div>
                         </div>
-                        <h5 class="fs-16 mb-1">Anna Adame</h5>
+                        <h5 class="fs-16 mb-1">{{$user->name}}</h5>
                     </div>
                 </div>
             </div>
@@ -62,23 +62,33 @@
                 <div class="card-body p-4">
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                            <form action="javascript:void(0);">
+                            <form action="{{route('backend.settings.profile.update')}}" method="post">
+                                @csrf
+                                @method('PATCH')
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Name</label>
-                                            <input type="text" name="username" class="form-control" id="firstnameInput"
-                                                placeholder="Enter your firstname" value="Dave">
+                                            <label for="name" class="form-label">Name</label>
+                                            <input type="text" name="name" class="form-control" id="firstnameInput"
+                                                placeholder="Enter your firstname" value='{{old('name',$user->name)}}'>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="phone" name="phone" class="form-control" 
+                                                placeholder="Enter your phone number" value='{{old('phone',$profile->phone)}}'>
                                         </div>
                                     </div>
 
-
                                     <!--end col-->
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <label for="email" class="form-label">Email Address</label>
-                                            <input type="email" name="email" class="form-control" id="emailInput"
-                                                placeholder="Enter your email" value="daveadame@velzon.com">
+                                            <label for="address" class="form-label">Address</label>
+                                            <input type="text" name="address" class="form-control" id="emailInput"
+                                                placeholder="Dhaka, Bangladesh" value='{{old('address',$profile->address)}}'>
                                         </div>
                                     </div>
 

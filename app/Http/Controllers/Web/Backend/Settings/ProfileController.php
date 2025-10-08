@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Backend\Settings;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Container\Attributes\Storage;
 
@@ -14,6 +15,20 @@ class ProfileController extends Controller
         $data['user']  = auth()->user();
         $data['profile'] = $data['user']->profile;
         return view("backend.layout.settings.profile", $data);
+    }
+
+    public function update(Request $request){
+        $validator = Validator::make($request->all(), [
+            "name"=> "required",
+            "phone"=> "nullable|string",
+            "address"=> "nullable|string",
+        ]);
+        $user = User::find(auth()->user()->id);
+        $user->update($request->only('name'));
+
+        $user->profile()->update($request->only(['address', 'phone']));
+
+        return redirect()->back()->with('success','profile updated successfully');
     }
 
     public function avatar(Request $request){

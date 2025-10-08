@@ -11,6 +11,7 @@ Route::group(["prefix"=> "settings", "as"=> "settings."], function () {
         Route::get('/', 'index')->name('index');
         Route::post('upload-avatar','avatar')->name('avatar.upload');
         Route::post('upload-banner','banner')->name('banner.upload');
+        Route::patch('update-profile', 'update')->name('update');
     });
 
     Route::controller(SystemController::class)->prefix('system/')->name('system.')->group(function(){
