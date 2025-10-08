@@ -1,6 +1,6 @@
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('')}}assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{$settings->icon ? asset($settings->icon) : asset('assets/images/favicon.ico')}}">
 
     <!-- jsvectormap css -->
     <link href="{{asset('')}}assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />

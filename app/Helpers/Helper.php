@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
+use Intervention\Image\Facades\Image;
 
     //! File or Image Upload
 
@@ -11,7 +12,46 @@ use Illuminate\Support\Str;
         }
         return fileUpload($file,  $folder, $option);
     }
+
     function fileUpload($file, string $folder, string $option = null): ?string
+    {
+        if (!$file || !$file->isValid()) {
+            return null;
+        }
+
+        // Generate clean unique filename
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $slugName     = Str::slug($originalName);
+        $imageName    = $slugName . '-' . uniqid() . '.' . $file->extension();
+
+        // Define storage path
+        $uploadPath = public_path('uploads/' . $folder);
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        // Full file path
+        $filePath = $uploadPath . '/' . $imageName;
+
+        // Resize / process image
+        $img = Image::make($file)
+            ->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+        // Optionally apply other operations
+        if ($option === 'thumb') {
+            $img->resize(100, 100);
+        }
+
+        $img->save($filePath, 90);
+
+        // Return relative path (useful for DB & display)
+        return 'uploads/' . $folder . '/' . $imageName;
+    }
+
+    function fileUpload_old($file, string $folder, string $option = null): ?string
     {
         if (!$file->isValid()) {
             return null;
@@ -23,8 +63,16 @@ use Illuminate\Support\Str;
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
-        $file->move($path, $imageName);
-        return 'uploads/' . $folder . '/' . $imageName;
+        $path = $path.'/'. $imageName;
+        // $file->move($path, $imageName);
+        Image::make($file)
+            ->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio(); // maintain ratio
+                $constraint->upsize();     // prevent upsizing
+            })
+            ->save($path, 90);
+        return $path;
+        // return 'uploads/' . $folder . '/' . $imageName;
     }
 
     //! File or Image Delete

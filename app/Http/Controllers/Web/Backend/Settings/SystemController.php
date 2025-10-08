@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Web\Backend\Settings;
-
+use Intervention\Image\Facades\Image;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SystemRequest;
 use App\Models\Setting;
