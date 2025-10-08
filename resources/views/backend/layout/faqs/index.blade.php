@@ -61,7 +61,8 @@
                 $('.data-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    responsive: true,
+                    responsive: { details: true },
+
                     ajax: "{{ route('backend.faq.index') }}",
                     columns: [
                         { data: 'id', name: 'id' },
@@ -91,7 +92,7 @@
                 success: function (response) {
                     console.log(response);
                     // Reloade DataTable
-                    $('#datatable').DataTable().ajax.reload();
+                    $('.datatable').DataTable().ajax.reload();
                     if (response.success) {
                         $('.data-table').DataTable().ajax.reload();
                         Swal.fire({
@@ -122,7 +123,7 @@
             });
         }
 
-        function edit(id) {
+        function editFaq(id) {
             let url = "{{ route('backend.faq.edit', ':id') }}";
             url = url.replace(':id', id);
 
