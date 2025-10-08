@@ -8,7 +8,7 @@ use App\Http\Controllers\Web\Backend\SiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/{page?}', function ($page = null) {
-    return redirect()->route('backend.index');
+    return redirect()->route('backend.dashboard.index');
 })->where('page', 'home|index');
 
 
