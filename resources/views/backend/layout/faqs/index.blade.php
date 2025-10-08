@@ -7,7 +7,7 @@
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">All FAQs</h5>
                         <div class="flex-shrink-0">
-                            <a class="btn btn-danger add-btn" href="{{route('backend.faq.create')}}">
+                            <a class="btn btn-danger add-btn" href="{{route('backend.feature.faq.create')}}">
                                 <i class="ri-add-line align-bottom me-1"></i> Create FAQ
                             </a>
 
@@ -63,7 +63,7 @@
                     serverSide: true,
                     responsive: { details: true },
 
-                    ajax: "{{ route('backend.faq.index') }}",
+                    ajax: "{{ route('backend.feature.faq.index') }}",
                     columns: [
                          { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                         { data: 'question', name: 'question' },
@@ -81,7 +81,7 @@
                 .responsive.recalc();
         });
         function statusFaq(id) {
-            let url = "{{ route('backend.faq.status', ':id') }}";
+            let url = "{{ route('backend.feature.faq.status', ':id') }}";
             $.ajax({
                 type: "POST",
                 url: url.replace(':id', id),
@@ -124,7 +124,7 @@
         }
 
         function editFaq(id) {
-            let url = "{{ route('backend.faq.edit', ':id') }}";
+            let url = "{{ route('backend.feature.faq.edit', ':id') }}";
             url = url.replace(':id', id);
 
             window.location.href = url;

@@ -9,7 +9,7 @@
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
                                         <h4 class="mb-sm-0">Create FAQ</h4>
-                                        <a href="{{ route('backend.faq.index') }}" class="btn btn-sm btn-outline-secondary">
+                                        <a href="{{ route('backend.feature.faq.index') }}" class="btn btn-sm btn-outline-secondary">
                                                 <i class="mdi mdi-arrow-left"></i> Back
                                         </a>
                                 </div>
@@ -25,7 +25,7 @@
         </div>
         <!-- end page title -->
 
-        <form method="post" action="{{ @$faq ? route('backend.faq.update', @$faq->id) : route('backend.faq.store')}}"
+        <form method="post" action="{{ @$faq ? route('backend.feature.faq.update', @$faq->id) : route('backend.feature.faq.store')}}"
                 class="row">
                 @csrf
                 @if (@$faq)
@@ -80,7 +80,7 @@
 
                         <!-- end card -->
                         <div class="text-end mb-4">
-                                <button type="submit" class="btn btn-danger w-sm">Delete</button>
+                                <a href="{{route('backend.feature.faq.index')}}" class="btn btn-danger w-sm">Cancel</a>
                                 {{-- <button type="submit" class="btn btn-secondary w-sm">Draft</button> --}}
                                 <button type="submit" class="btn btn-success w-sm">{{@$faq ? 'Update' : 'Create'}}</button>
                         </div>

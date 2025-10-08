@@ -38,7 +38,7 @@ class FaqController extends Controller
                     <button onclick="editFaq(' . $data->id . ')" type="button" class="btn btn-info btn-sm">
                         <i class="mdi mdi-pencil"></i>
                     </button>
-                    <button type="button" onclick="deleteData(\'' . route('backend.faq.destroy', $data->id) . '\')" class="btn btn-danger btn-sm del">
+                    <button type="button" onclick="deleteData(\'' . route('backend.feature.faq.destroy', $data->id) . '\')" class="btn btn-danger btn-sm del">
                         <i class="mdi mdi-delete"></i>
                     </button>
                 ';
@@ -70,7 +70,7 @@ class FaqController extends Controller
         Faq::create($validated);
 
         return redirect()
-        ->route('backend.faq.index')
+        ->route('backend.feature.faq.index')
         ->with('success','new faq successfully created');
     }
 
@@ -88,7 +88,7 @@ class FaqController extends Controller
         // dd($request->all());
         $faq->update($validated);
 
-        return redirect()->route('backend.faq.index')->with('success','Faq Updaed');
+        return redirect()->route('backend.feature.faq.index')->with('success','Faq Updaed');
     }
 
     public function destroy(Faq $faq){

@@ -32,25 +32,26 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link {{Route::is('backend.dashboard.*') ? 'active' : ''}}" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('backend.index')}}" class="nav-link" data-key="t-ecommerce"> Home </a>
+                                <a href="{{route('backend.dashboard.index')}}" class="nav-link {{Route::is('backend.dashboard.*') ? 'active' : ''}}" data-key="t-ecommerce"> Home </a>
                             </li>
                         </ul>
                     </div>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                    <a class="nav-link menu-link {{Route::is('backend.feature.*')? 'active':''}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Features</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
+                                <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" 
+                                aria-controls="sidebarProjects" data-key="t-projects">
                                     Projects
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarProjects">
@@ -75,12 +76,9 @@
                                 <div class="collapse menu-dropdown" id="sidebarTasks">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{route('backend.faq.index')}}" class="nav-link" data-key="t-list-view">
+                                            <a href="{{route('backend.feature.faq.index')}}" class="nav-link {{Route::is('backend.feature.faq.*')? 'active':''}}" data-key="t-list-view">
                                                 List View 
                                             </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{route('backend.faq.create')}}" class="nav-link" data-key="t-task-details"> Create FAQ </a>
                                         </li>
                                     </ul>
                                 </div>
