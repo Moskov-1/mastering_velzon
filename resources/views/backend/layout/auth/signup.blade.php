@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="mb-4">
-            <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Velzon <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
+            <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the {{$settings->app_name}} <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
         </div>
 
         <div id="password-contain" class="p-3 bg-light mb-2 rounded">
