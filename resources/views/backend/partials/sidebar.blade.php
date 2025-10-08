@@ -100,7 +100,7 @@
                     <div class="collapse menu-dropdown" id="sidebarPages">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="pages-starter.html" class="nav-link" data-key="t-starter"> All </a>
+                                <a href="{{route('backend.page.index')}}" class="nav-link" data-key="t-starter"> All </a>
                             </li>
                             
                         </ul>

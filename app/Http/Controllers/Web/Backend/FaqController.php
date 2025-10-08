@@ -18,9 +18,7 @@ class FaqController extends Controller
             $faq = Faq::latest('priority')->get();
             return DataTables::of($faq)
             ->addIndexColumn()
-            ->addColumn('id', function($faq){
-                return ''.$faq->id.'';
-            })
+            
             ->addColumn('question', function($faq){
                 return ''.$faq->question.'';
             })

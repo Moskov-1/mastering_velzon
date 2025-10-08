@@ -16,6 +16,9 @@
 <script src="{{asset('')}}assets/js/plugins.js"></script>
 
 
+{{-- toaster js --}}
+<script src="{{ asset('backend/js/toastr.min.js') }}"></script>
+
 <!-- apexcharts -->
 <script src="{{asset('')}}assets/libs/apexcharts/apexcharts.min.js"></script>
 

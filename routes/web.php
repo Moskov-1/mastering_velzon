@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\Web\Backend\Auth\AuthController;
 use App\Http\Controllers\Web\Backend\FaqController;
 use App\Http\Controllers\Web\Backend\ProjectController;
@@ -19,6 +20,10 @@ Route::group(['prefix'=> 'admin/', 'as'=>'backend.', 'middleware'=> ['admin.auth
 
     Route::post('faq/status/{id}', [FaqController::class,'status'])->name('faq.status');
     Route::resource('faq', FaqController::class)->except(['show']);
+
+
+    Route::post('page/status/{id}', [PageController::class,'status'])->name('page.status');
+    Route::resource('page', PageController::class)->except(['show']);
 
     
     require_once __DIR__ .'/settings.php';

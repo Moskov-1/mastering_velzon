@@ -65,7 +65,7 @@
 
                     ajax: "{{ route('backend.faq.index') }}",
                     columns: [
-                        { data: 'id', name: 'id' },
+                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                         { data: 'question', name: 'question' },
                         { data: 'answer', name: 'answer' },
                         { data: 'priority', name: 'priority' },
