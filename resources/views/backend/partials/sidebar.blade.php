@@ -32,29 +32,29 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{Route::is('backend.dashboard.*') ? 'active' : ''}}" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link  {{getPageStatus('backend.dashboard.*', 'collapsed active')}}" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                    <div class="collapse menu-dropdown {{getPageStatus('backend.dashboard.*', 'show')}}" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('backend.dashboard.index')}}" class="nav-link {{Route::is('backend.dashboard.*') ? 'active' : ''}}" data-key="t-ecommerce"> Home </a>
+                                <a href="{{route('backend.dashboard.index')}}" class="nav-link {{getPageStatus('backend.dashboard.index')}}" data-key="t-ecommerce"> Home </a>
                             </li>
                         </ul>
                     </div>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{Route::is('backend.feature.*')? 'active':''}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                    <a class="nav-link menu-link {{getPageStatus('backend.feature.*', 'collapsed active')}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Features</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
+                    <div class="collapse menu-dropdown {{getPageStatus('backend.feature.*','show')}}" id="sidebarApps">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" 
                                 aria-controls="sidebarProjects" data-key="t-projects">
                                     Projects
                                 </a>
-                                <div class="collapse menu-dropdown" id="sidebarProjects">
+                                <div class="collapse menu-dropdown " id="sidebarProjects">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
                                             <a href="#" class="nav-link" data-key="t-list"> List
@@ -69,14 +69,14 @@
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarTasks" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTasks" 
+                                <a href="#sidebarTasks" class="nav-link {{getPageStatus('backend.feature.faq.*','active')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTasks" 
                                 data-key="t-tasks"> 
                                     FAQ
                                 </a>
-                                <div class="collapse menu-dropdown" id="sidebarTasks">
+                                <div class="collapse menu-dropdown {{getPageStatus('backend.feature.faq.*','show')}}" id="sidebarTasks">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{route('backend.feature.faq.index')}}" class="nav-link {{Route::is('backend.feature.faq.*')? 'active':''}}" data-key="t-list-view">
+                                            <a href="{{route('backend.feature.faq.index')}}" class="nav-link {{getPageStatus('backend.feature.faq.*')}}" data-key="t-list-view">
                                                 List View 
                                             </a>
                                         </li>
@@ -92,13 +92,13 @@
                 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                    <a class="nav-link menu-link {{getPageStatus('backend.page.*','collapsed active')}}" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
                         <i class="ri-pages-line"></i> <span data-key="t-pages">Pages</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarPages">
+                    <div class="collapse menu-dropdown {{getPageStatus('backend.page.*','show')}}" id="sidebarPages">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('backend.page.index')}}" class="nav-link" data-key="t-starter"> All </a>
+                                <a href="{{route('backend.page.index')}}" class="nav-link {{getPageStatus('backend.page.*')}}" data-key="t-starter"> All </a>
                             </li>
                             
                         </ul>
@@ -106,19 +106,19 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
+                    <a class="nav-link menu-link {{getPageStatus('backend.settings.*')}}" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
                         <i class="ri-share-line"></i> <span data-key="t-multi-level">Settings</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarMultilevel">
+                    <div class="collapse menu-dropdown {{getPageStatus('backend.settings.*', 'show')}}" id="sidebarMultilevel">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('backend.settings.profile.index')}}" class="nav-link" data-key="t-level-1.1"> Profile Settings </a>
+                                <a href="{{route('backend.settings.profile.index')}}" class="nav-link {{getPageStatus('backend.settings.profile.*')}}" data-key="t-level-1.1"> Profile Settings </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('backend.settings.system.index')}}" class="nav-link" data-key="t-level-1.1"> System Settings </a>
+                                <a href="{{route('backend.settings.system.index')}}" class="nav-link {{getPageStatus('backend.settings.system.*')}}" data-key="t-level-1.1"> System Settings </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('backend.settings.mail.index')}}" class="nav-link" data-key="t-level-1.1">  Mail Settings</a>
+                                <a href="{{route('backend.settings.mail.index')}}" class="nav-link {{getPageStatus('backend.settings.mail.*')}}" data-key="t-level-1.1">  Mail Settings</a>
                             </li>
                         </ul>
                     </div>

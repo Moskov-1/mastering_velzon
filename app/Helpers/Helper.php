@@ -2,10 +2,15 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 
     //! File or Image Upload
-
+    function getPageStatus(string $url , $text=null){
+        if($text)
+        return Route::is($url) ? $text : '';
+        return Route::is($url) ? 'active' : '';
+    }
     function fileUpdate($file, string $folder, string $old = null, $option = null){
         if($old){
             fileDelete($old);
