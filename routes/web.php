@@ -16,6 +16,8 @@ require_once __DIR__ .'/auth.php';
 Route::group(['prefix'=> 'admin/', 'as'=>'backend.', 'middleware'=> ['admin.auth']], function () {
     Route::get('/', [SiteController::class,'index'])->name('index');
     Route::resource('project', ProjectController::class)->except(['show']);
+
+    Route::post('faq/status/{id}', [FaqController::class,'status'])->name('faq.status');
     Route::resource('faq', FaqController::class)->except(['show']);
 
     

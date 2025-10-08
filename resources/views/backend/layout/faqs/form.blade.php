@@ -20,9 +20,12 @@
         </div>
         <!-- end page title -->
 
-        <form method="post" action="{{ @$faq ? route('backend.faq.update',['id' => @$faq->id]) : route('backend.faq.store')}}"
+        <form method="post" action="{{ @$faq ? route('backend.faq.update', @$faq->id) : route('backend.faq.store')}}"
         class="row">
                 @csrf
+                @if (@$faq)
+                        @method('PATCH')
+                @endif
                 <div class="col-lg-8">
                         <div class="card">
                                 <div class="card-body">

@@ -7,42 +7,40 @@
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">All FAQs</h5>
                         <div class="flex-shrink-0">
-                            <button class="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#showModal">
-                            <i class="ri-add-line align-bottom me-1"></i> Create FAQ</button>
-                            <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                            <a class="btn btn-danger add-btn" href="{{route('backend.faq.create')}}">
+                                <i class="ri-add-line align-bottom me-1"></i> Create FAQ
+                            </a>
+
+                            {{-- <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i
+                                    class="ri-delete-bin-2-line"></i></button> --}}
                         </div>
                     </div>
                 </div>
-               
+
                 <!--end card-body-->
-                <div class="card-body">
-                    <div class="table-responsive table-card mb-4">
-                        <table class="table align-middle table-nowrap data-table table-striped mb-0" id="faq-table">
-                            <thead class="table-light text-muted">
-                                <tr>
-                                    <th class="wd-15p border-bottom-0">ID</th>
-                                    <th class="wd-15p border-bottom-0">Question</th>
-                                    <th class="wd-15p border-bottom-0">Question</th>
-                                    <th class="wd-15p border-bottom-0">Priority</th>
-                                    <th class="wd-15p border-bottom-0">Status</th>
-                                    <th class="wd-15p border-bottom-0">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="list form-check-all">
-                             
-                            </tbody>
-                        </table>
-                        <!--end table-->
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" 
-                                style="width:75px;height:75px"></lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">We've searched more than 200k+ tasks We did not find any tasks for you search.</p>
-                            </div>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">FAQ List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive table-card mb-4">
+                            <table class="table align-middle table-nowrap table-striped mb-0 data-table">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th class="wd-10p border-bottom-0">ID</th>
+                                        <th class="wd-30p border-bottom-0">Question</th>
+                                        <th class="wd-30p border-bottom-0">Answer</th>
+                                        <th class="wd-10p border-bottom-0">Priority</th>
+                                        <th class="wd-10p border-bottom-0">Status</th>
+                                        <th class="wd-10p border-bottom-0">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
                 <!--end card-body-->
             </div>
             <!--end card-->
@@ -58,41 +56,112 @@
 @push('scripts-bottom')
 
     <script>
-    (function($){
-        $(function () {
-            $('.data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                ajax: "{{ route('backend.faq.index') }}",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'question', name: 'question'},
-                    {data: 'answer', name: 'answer'},
-                    {data: 'priority', name: 'priority'},
-                    {data: 'status', name: 'status', orderable: false, searchable: false},
-                    {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+        (function ($) {
+            $(function () {
+                $('.data-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    ajax: "{{ route('backend.faq.index') }}",
+                    columns: [
+                        { data: 'id', name: 'id' },
+                        { data: 'question', name: 'question' },
+                        { data: 'answer', name: 'answer' },
+                        { data: 'priority', name: 'priority' },
+                        { data: 'status', name: 'status', orderable: false, searchable: false },
+                        { data: 'action', name: 'action', orderable: false, searchable: false }
+                    ]
+                });
             });
+        })(jQuery);
+        $(document).on('shown.bs.collapse shown.bs.tab', function () {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust()
+                .responsive.recalc();
         });
-    })(jQuery);
-
-
-    function editFaq(id) {
-        window.location.href = "/admin/faq/" + id + "/edit";
-    }
-
-    function deleteData(url) {
-        if(confirm("Are you sure you want to delete this FAQ?")) {
+        function statusFaq(id) {
+            let url = "{{ route('backend.faq.status', ':id') }}";
             $.ajax({
-                url: url,
-                type: 'DELETE',
-                data: {_token: "{{ csrf_token() }}"},
-                success: function () {
-                    $('.data-table').DataTable().ajax.reload();
+                type: "POST",
+                url: url.replace(':id', id),
+                data: {
+                    id: id,
+                    _token: "{{csrf_token()}}"
+                },
+                success: function (response) {
+                    console.log(response);
+                    // Reloade DataTable
+                    $('#datatable').DataTable().ajax.reload();
+                    if (response.success) {
+                        $('.data-table').DataTable().ajax.reload();
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",   // top-end, top-start, bottom-end, bottom-start
+                            icon: "success",
+                            title: response.message || "Faq Deleted successfully",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            icon: "error",
+                            title: response.message || "Something went wrong",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                },
+                error: function (error) {
+                    // location.reload();
                 }
             });
         }
-    }
+
+        function edit(id) {
+            let url = "{{ route('backend.faq.edit', ':id') }}";
+            url = url.replace(':id', id);
+
+            window.location.href = url;
+        }
+
+        function deleteData(url) {
+            if (confirm("Are you sure you want to delete this FAQ?")) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    data: { _token: "{{ csrf_token() }}" },
+                    success: function (response) {
+                        if (response.success) {
+                            $('.data-table').DataTable().ajax.reload();
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",   // top-end, top-start, bottom-end, bottom-start
+                                icon: "success",
+                                title: response.message || "Faq Deleted successfully",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                toast: true,
+                                position: "top-end",
+                                icon: "error",
+                                title: response.message || "Something went wrong",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true
+                            });
+                        }
+                    }
+                });
+            }
+        }
     </script>
 @endpush

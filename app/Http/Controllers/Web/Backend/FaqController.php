@@ -13,37 +13,9 @@ use Yajra\DataTables\Facades\DataTables;
 
 class FaqController extends Controller
 {   
-     public function index_old(Request $request) {
-        if ($request->ajax()) {
-            $data = Faq::latest()
-                ->get();
-
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('question', function ($data) {
-                    $name = $data->name;
-                    return $name;
-                })
-                ->addColumn('answer', function ($data) {
-                    $name = $data->name;
-                    return $name;
-                })
-                
-                ->addColumn('action', function ($data) {
-                    return '<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                <a href="#" type="button" onclick="showDeleteConfirm(' . $data->id . ')" class="btn btn-danger fs-14 text-white delete-icn" title="Delete">
-                                    <i class="fe fe-trash"></i>
-                                </a>
-                            </div>';
-                })
-                ->rawColumns(['question', 'answer','action'])
-                ->make();
-        }
-        return view('backend.layout.faqs.index-v2');
-    }
     public function index(Request $request){
         if($request->ajax()){
-            $faq = Faq::where("status", Faq::STATUS['ACTIVE'])->latest('priority')->get();
+            $faq = Faq::latest('priority')->get();
             return DataTables::of($faq)
             ->addIndexColumn()
             ->addColumn('id', function($faq){
@@ -102,5 +74,48 @@ class FaqController extends Controller
         return redirect()
         ->route('backend.faq.index')
         ->with('success','new faq successfully created');
+    }
+
+    public function edit(Faq $faq){
+
+        return view('backend.layout.faqs.form', ['faq'=> $faq, 'status' => Faq::STATUS]);
+    }
+    public function update(Request $request, Faq $faq){
+        $validated = $request->validate([
+            "question"  => "required",
+            'answer' => 'required',
+            'priority'=> 'required|min:1',
+            'status'=> 'required',
+        ]);
+        // dd($request->all());
+        $faq->update($validated);
+
+        return redirect()->route('backend.faq.index')->with('success','Faq Updaed');
+    }
+
+    public function destroy(Faq $faq){
+        // dd('here');
+        try {
+            $faq->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Deleted successfully.',
+            ]);
+        } catch (\Exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the Data.',
+            ]);
+        }
+    }
+
+    public function status($id){
+        $faq = Faq::findOrFail($id);
+        $faq->status = !$faq->status;
+        $faq->save();
+        return response()->json([
+            'success'=> true,
+            'message'=> 'status updated',
+            ]);
     }
 }
