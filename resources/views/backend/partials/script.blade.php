@@ -82,7 +82,7 @@
                 }   
             }).then(response => {
                 if(response.ok){
-                    window.location.href = "{{route('auth.login.get')}}";
+                    window.location.href = "{{route('login')}}";
                 }
             });
         });
