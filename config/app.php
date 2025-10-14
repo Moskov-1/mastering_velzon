@@ -14,7 +14,9 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    
+    'force_logout_on_restart' => env('FORCE_LOGOUT_ON_RESTART', false),
+    'session_key' => env('APP_SESSION_KEY', 'dev_1'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
