@@ -1,15 +1,8 @@
-@extends('backend.master')
+@extends('backend.layout.auth.auth-app')
 @section('content')
-<form action="{{route('auth.reset.post')}}" method="post">
+<form action="{{route('auth.reset.finish')}}" method="post">
     @csrf
-    <div class="row mb-3">
-        <div class="col-lg-3">
-            <label for="nameInput" class="form-label">Current Password</label>
-        </div>
-        <div class="col-lg-9">
-            <input type="text" class="form-control" id="nameInput" name="curr_password" placeholder="Enter your current password">
-        </div>
-    </div>
+    <input type="text" hidden name="email" value="{{ $email }}">
     <div class="row mb-3">
         <div class="col-lg-3">
             <label for="nameInput" class="form-label">New Password</label>
