@@ -40,8 +40,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="page_content" class="form-label">Page Content</label>
-                            <textarea name="page_content" id="page_content" class="form-control ck-editor" rows="5"
-                                placeholder="page_content">{{ old('page_content', @$page->page_content) }}</textarea>
+                            <textarea name="page_content" id="ckeditor-classic" class="form-control" rows="5"
+                                placeholder="Enter content...">{{ old('page_content', @$page->page_content) }}</textarea>
                             @error('page_content')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -53,3 +53,18 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts-top')
+<!-- ✅ CKEditor 5 Classic Editor from CDN -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        ClassicEditor
+            .create(document.querySelector('#ckeditor-classic'))
+            .catch(error => {
+                console.error(error);
+            });
+    });
+</script>
+@endpush

@@ -65,7 +65,7 @@
                                         <div class="row">
                                                 <div class="mb-3">
                                                         <label class="form-label">FAQ Answer</label>
-                                                        <textarea name='answer' id="ckeditor-classic">{{old('answer', @$aq->answer)}}
+                                                        <textarea name='answer' id="ckeditor-classic">{{old('answer', @$faq->answer)}}
                                                                 </textarea>
                                                         @error('answer')
                                                                 <small class="text-danger">{{ $message }}</small>
@@ -98,7 +98,7 @@
                                                         id="choices-privacy-status-input">
                                                         <option value="" disabled selected>Select Option</option>
                                                         @foreach ($status as $key => $item)
-                                                                <option value="{{$item}}" {{old('status', @$faq->status) ? 'selected' : ''}}>{{$key}}</option>
+                                                                <option value="{{$item}}" {{old('status', $item) == @$faq->status ? 'selected' : ''}}>{{$key}}</option>
                                                         @endforeach
                                                 </select>
                                         </div>
