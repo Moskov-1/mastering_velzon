@@ -15,7 +15,9 @@
     <!-- yajra datatable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-    
+        {{-- Toastr CSS --}}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
     <!-- Layout config Js -->
     <script src="{{asset('')}}assets/js/layout.js"></script>
     <!-- Bootstrap Css -->
@@ -32,5 +34,10 @@
         .data-table td {
             text-align: center !important;
             vertical-align: middle !important;
+        }
+         .toast {
+            background-color: #333 !important;
+            color: #fff !important;
+            font-weight: 500;
         }
     </style>

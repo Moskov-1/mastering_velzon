@@ -17,7 +17,10 @@
 
 
 {{-- toaster js --}}
-<script src="{{ asset('backend/js/toastr.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/raihan/toastr.min.js') }}"></script> --}}
+
+{{-- Toastr JS --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <!-- apexcharts -->
 <script src="{{asset('')}}assets/libs/apexcharts/apexcharts.min.js"></script>
