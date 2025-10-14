@@ -5,7 +5,6 @@ use App\Http\Controllers\Web\Backend\SystemUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Web\Backend\FaqController;
-use App\Http\Controllers\Web\Backend\RoleController;
 use App\Http\Controllers\Web\Backend\SiteController;
 use App\Http\Controllers\Web\Backend\ProjectController;
 
@@ -30,10 +29,10 @@ Route::group([ 'as'=>'backend.'], function () {
     Route::resource('page', PageController::class)->except(['show']);
     
     Route::post('system-user/status/{id}', [SystemUserController::class,'status'])
-    ->name('system-user.status')->middleware('permission:user_management');
+    ->name('system-user.status');
     
     Route::resource('system-user', SystemUserController::class)
-    ->except(['show'])->middleware('permission:user_management');
+    ->except(['show']);
     
 
     require_once __DIR__ .'/settings.php';

@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function () {
-            Route::middleware(['web', 'auth', 'role:super_admin|admin', 'session.validity.check' ])->prefix('admin')
+            Route::middleware(['web', 'auth', 'admin.auth', 'session.validity.check' ])->prefix('admin')
                 ->group(base_path('routes/admin.php'));
         }
     )

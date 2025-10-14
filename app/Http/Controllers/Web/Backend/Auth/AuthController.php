@@ -39,6 +39,8 @@ class AuthController extends Controller
         ]);
 
          if( Auth::attempt(['email' => $request->email,'password'=> $request->password]) ){
+            $request->session()->regenerate();
+
             return redirect()->route('backend.dashboard.index')->with("success","login completed successfully");
         }
         return back()->with(
