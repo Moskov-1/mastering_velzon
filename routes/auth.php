@@ -19,7 +19,7 @@ Route::group(['as'=> 'auth.'], function () {
     Route::post('otp-link', [PasswordResetController::class,'submitOtp'])->name('otp.post');
     Route::post('finish-reset-password', [PasswordResetController::class, 'reset'])->name('reset.finish');
 
-    Route::group(['middleware'=> 'admin'], function () {
+    Route::group(['middleware'=> 'admin.auth'], function () {
         Route::post('logout', [AuthController::class,'logout'])->name('logout.post');
         Route::get('reset-password', [AuthController::class,'getResetPasswordForm'])->name('reset.get');
         Route::post('reset-password', [AuthController::class,'resetPassword'])->name('reset.post');

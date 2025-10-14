@@ -61,20 +61,6 @@
                                         <input type="text" name="is_admin_user" hidden value="1">
                                         <div class="row">
                                                 <div class="col-lg-6">
-                                                        <div class="mb-3">
-                                                                <label for="role" class="form-label">Assign Roles</label>
-                                                                <select class="form-select select2" id="role" name="role[]" multiple>
-                                                                @foreach($roles as $role)
-                                                                        <option value="{{ $role }}"
-                                                                        {{ in_array($role, @$userRoles ?? []) ? 'selected' : '' }}>
-                                                                        {{ ucfirst($role) }}
-                                                                        </option>
-                                                                @endforeach
-                                                                </select>
-                                                        </div>
-                                                </div>
-
-                                                <div class="col-lg-6">
                                                         <div class="mb-3 mb-lg-0">
                                                                 <label for="email"
                                                                         class="form-label">Password</label>

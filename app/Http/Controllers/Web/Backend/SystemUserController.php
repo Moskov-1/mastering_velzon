@@ -6,8 +6,9 @@ use App\Models\User;
 use App\Rules\PasswordRule;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
-use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class SystemUserController extends Controller
@@ -28,11 +29,6 @@ class SystemUserController extends Controller
             ->addColumn('email', function ($user) {
                 return $user->email;
             })
-            ->addColumn('roles', function ($user) {
-                return $user->getRoleNames()
-                    ->map(fn($role) => "<span class='badge bg-primary'>$role</span>")
-                    ->implode(' ');
-            })
             ->addColumn('status', function ($data) {
                 $backgroundColor  = $data->status ? '#4CAF50' : '#ccc';
                 $sliderTranslateX = $data->status ? '26px' : '2px';
@@ -49,14 +45,13 @@ class SystemUserController extends Controller
                 </button>
             ';
             })
-            ->rawColumns(['roles', 'status', 'action'])
+            ->rawColumns([ 'status', 'action'])
             ->make(true);
         }
         return view('backend.layout.users.system_users.index');
     }
     public function create(){
-        $roles = Role::all()->pluck('name')->toArray();
-        return view('backend.layout.users.system_users.form', compact('roles'));
+        return view('backend.layout.users.system_users.form');
     }
     public function store(UserRequest $request){
         // dd($request->all());
@@ -67,35 +62,15 @@ class SystemUserController extends Controller
         $user->email = $data['email'];
         $user->is_admin_user = $data['is_admin_user'];
         $user->password = bcrypt($data['password']);
+        $user->role = User::roles()['ADMIN'];
         $user->save();
-        if ($request->has('role')) {
-            $user->syncRoles($request->role);
-        }
+        
         return redirect()->route('backend.system-user.index')->with('success','System User Successfully created');
     }
 
     public function edit(User $system_user){
-        // dd($system_user->roles());
-        $roles = Role::all()->pluck('name')->toArray();
-        $userRoles = $system_user->getRoleNames()->toArray();
-        // dd($system_user->getRoleNames());
-        // dd([
-        //     'permissions' => $system_user->getAllPermissions()->pluck('name'),
-        //     'can_role_management' => $system_user->can('role_management'),
-        //     'guard' => $system_user->guard_name ?? 'web (default)',
-        //     Permission::pluck('guard_name', 'name'),
-        //     Role::pluck('guard_name', 'name')
-        // ]);
-        // dd([
-        //     'user_roles' => $system_user->getRoleNames(),
-        //     'role_permissions' => $system_user->roles->flatMap->permissions->pluck('name')->unique(),
-        //     'direct_permissions' => $system_user->permissions->pluck('name'),
-        // ]);
-        dd([
-            'auth_guard' => auth()->getDefaultDriver(),
-            'user_guard' => $system_user->guard_name ?? 'no guard column on users table',
-        ]);
-        return view('backend.layout.users.system_users.form', compact('system_user', 'roles', 'userRoles'));
+        
+        return view('backend.layout.users.system_users.form', compact('system_user'));
     }
 
     
@@ -107,16 +82,12 @@ class SystemUserController extends Controller
             'password' => [['nullable', new PasswordRule]],
         ]);
         try {
-            if(is_null($request['password'])){
+            if(!is_null($request['password'])){
                 $system_user->password = bcrypt($request['password']);
                 $system_user->update();
             }
             $data = $request->only(['name','email']);
             $system_user->update($data);
-     
-            if ($request->has('role')) {
-                $system_user->syncRoles($request->role);
-            }
             
         } catch (\Exception $e) {
             return redirect()->route('backend.system-user.index')->with('error','System User Failed to Update,,,'.$e->getMessage());
@@ -139,6 +110,9 @@ class SystemUserController extends Controller
     }
     public function destroy(User $system_user){
         try {
+            if($system_user->id == Auth::user()->id){
+                return response()->json(['status'=> 'error', 'message', 'Can\'t delete own id ...']);
+            }
             $system_user->delete();
         } catch (\Exception $e) {
             return response()->json(['status'=> 'error', 'message', 'User delete Failed ...'. $e->getMessage() ]);

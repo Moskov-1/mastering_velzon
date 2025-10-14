@@ -104,7 +104,12 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                 <li class="nav-item">
+                    <a class="nav-link menu-link {{ request()->routeIs('backend.system-user.*') ? 'active' : '' }}" href="{{ route('backend.system-user.index') }}">
+                        <i class="ri-dashboard-line"></i> <span>System Users</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link {{getPageStatus('backend.settings.*')}}" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
                         <i class="ri-share-line"></i> <span data-key="t-multi-level">Settings</span>

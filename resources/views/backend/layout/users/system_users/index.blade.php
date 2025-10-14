@@ -28,7 +28,6 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Roles</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -101,12 +100,7 @@
                             orderable: true,
                             searchable: true
                         },
-                        {
-                            data: 'roles',
-                            name: 'roles',
-                            orderable: false,
-                            searchable: false
-                        },
+                        
                         {
                             data: 'status',
                             name: 'status',
