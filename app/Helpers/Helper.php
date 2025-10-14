@@ -45,7 +45,7 @@ use Intervention\Image\Facades\Image;
         $imageName    = $slugName . '-' . uniqid() . '.' . $file->extension();
 
         // Define storage path
-        $uploadPath = public_path('uploads/' . $folder);
+        $uploadPath = public_path('public_uploads/' . $folder);
         if (!file_exists($uploadPath)) {
             mkdir($uploadPath, 0755, true);
         }
@@ -68,7 +68,7 @@ use Intervention\Image\Facades\Image;
         $img->save($filePath, 90);
 
         // Return relative path (useful for DB & display)
-        return 'uploads/' . $folder . '/' . $imageName;
+        return 'public_uploads/' . $folder . '/' . $imageName;
     }
 
     function fileUpload_old($file, string $folder, string $option = null): ?string
@@ -79,7 +79,7 @@ use Intervention\Image\Facades\Image;
 
         $name = time() . '_' . $file->getClientOriginalName();
         $imageName = Str::slug($name) . '.' . $file->extension();
-        $path      = public_path('uploads/' . $folder);
+        $path      = public_path('public_uploads/' . $folder);
         if (!file_exists($path)) {
             mkdir($path, 0755, true);
         }
