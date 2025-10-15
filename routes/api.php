@@ -19,5 +19,6 @@ Route::group([
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);
     Route::post('/password/resend-otp', [AuthController::class, 'resendOtp']);   
     Route::post('/password/verify-otp', [AuthController::class, 'verifyOtp']);
-
 });
+
+require_once __DIR__ .'/frontend/dashboard.php';
