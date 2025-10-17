@@ -98,27 +98,54 @@
     <!--end back-to-top-->
 
 @endsection
+@push('scripts-bottom')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Sample full dataset (you would get this from your backend)
+        const fullDataset = {
+            orders: @json($orders),
+            earnings: @json($earnings),
+            refunds: @json($refunds),
+            months: @json($months)
+        };
 
-{{-- @push('scripts-bottom')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var chartElement = document.querySelector("#customer_impression_charts");
-            if (!chartElement) {
-                console.error("Chart container not found!");
-                return;
-            }
-
-            var ordersData = @json($orders);
-            var earningsData = @json($earnings);
-            var refundsData = @json($refunds);
-            var months = @json($months);
+        // Generate larger sample data for demonstration
+        const generateSampleData = () => {
+            const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const years = ['2022', '2023', '2024'];
             
-            console.log("Orders Data:", ordersData);
-            console.log("Earnings Data:", earningsData);
-            console.log("Refunds Data:", refundsData);
-            console.log("Months:", months);
+            let allData = {
+                orders: [],
+                earnings: [],
+                refunds: [],
+                months: [],
+                dates: []
+            };
 
-            var options = {
+            years.forEach(year => {
+                allMonths.forEach((month, index) => {
+                    allData.months.push(`${month} ${year}`);
+                    allData.dates.push(new Date(parseInt(year), index, 1));
+                    allData.orders.push(Math.floor(Math.random() * 1000) + 500);
+                    allData.earnings.push(Math.floor(Math.random() * 3000) + 1000);
+                    allData.refunds.push(Math.floor(Math.random() * 50) + 10);
+                });
+            });
+
+            return allData;
+        };
+
+        // Use provided data or generate sample data
+        const completeData = fullDataset.months && fullDataset.months.length > 0 ? fullDataset : generateSampleData();
+        
+        let currentChart = null;
+        let currentChartType = 'area';
+        let currentFilter = 'all';
+        let filteredData = { ...completeData };
+
+        // Chart configurations
+        const chartConfigs = {
+            area: {
                 chart: {
                     height: 370,
                     type: "area",
@@ -128,157 +155,272 @@
                 dataLabels: { enabled: false },
                 stroke: { curve: 'smooth', width: 2 },
                 series: [
-                    {
-                        name: "Orders",
-                        data: ordersData
-                    },
-                    {
-                        name: "Earnings",
-                        data: earningsData
-                    },
-                    {
-                        name: "Refunds",
-                        data: refundsData
-                    }
+                    { name: "Orders", data: [] },
+                    { name: "Earnings", data: [] },
+                    { name: "Refunds", data: [] }
                 ],
                 colors: ["#405189", "#0ab39c", "#f06548"],
-                xaxis: {
-                    categories: months
-                },
+                xaxis: { categories: [] },
                 legend: { position: 'bottom' },
-                fill: { opacity: 0.1 }
-            };
-
-            var chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
-            chart.render();
-
-            // Update the counter values after chart is rendered
-            setTimeout(function() {
-                if (ordersData && ordersData.length > 0) {
-                    var ordersTotal = ordersData.reduce((a, b) => a + b, 0);
-                    document.querySelector('[data-target="7585"]').innerText = ordersTotal;
+                fill: { opacity: 0.1 },
+                markers: {
+                    size: 0,
+                    hover: { size: 0 }
                 }
-                if (earningsData && earningsData.length > 0) {
-                    var earningsTotal = earningsData.reduce((a, b) => a + b, 0);
-                    document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
-                }
-                if (refundsData && refundsData.length > 0) {
-                    var refundsTotal = refundsData.reduce((a, b) => a + b, 0);
-                    document.querySelector('[data-target="367"]').innerText = refundsTotal;
-                }
-            }, 100);
-        });
-    </script>
-@endpush --}}
-
-@push('scripts-bottom')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var chartElement = document.querySelector("#customer_impression_charts");
-        if (!chartElement) {
-            console.error("Chart container not found!");
-            return;
-        }
-
-        var ordersData = @json($orders);
-        var earningsData = @json($earnings);
-        var refundsData = @json($refunds);
-        var months = @json($months);
-
-        var options = {
-            chart: {
-                height: 370,
-                type: "line",
-                toolbar: { show: false },
-                zoom: { enabled: false }
             },
-            dataLabels: { 
-                enabled: false 
-            },
-            stroke: { 
-                width: [0, 2, 2],
-                curve: 'smooth',
-                dashArray: [0, 0, 5] // Solid for bars and earnings, dotted for refunds
-            },
-            series: [
-                {
-                    name: "Orders",
-                    type: "column",
-                    data: ordersData
+            mixed: {
+                chart: {
+                    height: 370,
+                    type: "line",
+                    toolbar: { show: false },
+                    zoom: { enabled: false }
                 },
-                {
-                    name: "Earnings",
-                    type: "area", // Filled area
-                    data: earningsData
+                dataLabels: { enabled: false },
+                stroke: { 
+                    width: [0, 2, 2],
+                    curve: 'smooth',
+                    dashArray: [0, 0, 5]
                 },
-                {
-                    name: "Refunds",
-                    type: "area", // Regular line
-                    data: refundsData
+                series: [
+                    { name: "Orders", type: "column", data: [] },
+                    { name: "Earnings", type: "area", data: [] },
+                    { name: "Refunds", type: "area", data: [] }
+                ],
+                colors: ["#2ebdd6ff", "#0ab39c", "#f06548"],
+                xaxis: { categories: [] },
+                legend: { position: 'bottom' },
+                fill: {
+                    type: ['solid', 'gradient', 'solid'],
+                    opacity: [0.8, 0.1, 0],
+                    gradient: {
+                        shade: 'light',
+                        type: "vertical",
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#0ab39c'],
+                        inverseColors: false,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.05,
+                        stops: [0, 90, 100]
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '40%',
+                        borderRadius: 5
+                    }
+                },
+                markers: {
+                    size: [0, 5, 4],
+                    colors: ['#405189', '#0ab39c', '#f06548'],
+                    strokeColors: '#fff',
+                    strokeWidth: 2,
+                    hover: { size: 6 }
                 }
-            ],
-            colors: ["#2ebdd6ff", "#0ab39c", "#f06548"],
-            xaxis: {
-                categories: months
-            },
-            legend: { 
-                position: 'bottom'
-            },
-            fill: {
-                type: ['solid', 'gradient', 'solid'],
-                opacity: [0.8, 0.1, 0],
-                gradient: {
-                    shade: 'light',
-                    type: "vertical",
-                    shadeIntensity: 0.5,
-                    gradientToColors: ['#0ab39c'],
-                    inverseColors: false,
-                    opacityFrom: 0.3,
-                    opacityTo: 0.05,
-                    stops: [0, 90, 100]
-                }
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: '40%',
-                    borderRadius: 5
-                }
-            },
-            markers: {
-                size: [0, 5, 4], // Only refunds have markers
-                colors: ['#405189', '#0ab39c', '#f06548'],
-                strokeColors: '#fff',
-                strokeWidth: 2,
-                hover: {
-                    size: 6
-                }
-            },
-            tooltip: {
-                shared: true,
-                intersect: false
             }
-
         };
 
-        var chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
-        chart.render();
+        // Filter data based on time range
+        function filterData(timeRange, customStart = null, customEnd = null) {
+            let filtered = {
+                orders: [],
+                earnings: [],
+                refunds: [],
+                months: []
+            };
 
-        // Update counters (same as before)
-        setTimeout(function() {
-            if (ordersData && ordersData.length > 0) {
-                var ordersTotal = ordersData.reduce((a, b) => a + b, 0);
-                document.querySelector('[data-target="7585"]').innerText = ordersTotal;
+            const now = new Date();
+            let startDate;
+
+            switch(timeRange) {
+                case '1M':
+                    startDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    break;
+                case '6M':
+                    startDate = new Date(now.getFullYear(), now.getMonth() - 6, now.getDate());
+                    break;
+                case '1Y':
+                    startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    break;
+                case 'custom':
+                    if (customStart && customEnd) {
+                        startDate = new Date(customStart);
+                        const endDate = new Date(customEnd);
+                        // Filter based on custom date range
+                        completeData.dates.forEach((date, index) => {
+                            if (date >= startDate && date <= endDate) {
+                                filtered.orders.push(completeData.orders[index]);
+                                filtered.earnings.push(completeData.earnings[index]);
+                                filtered.refunds.push(completeData.refunds[index]);
+                                filtered.months.push(completeData.months[index]);
+                            }
+                        });
+                        return filtered;
+                    }
+                    // Fall through to 'all' if no custom dates provided
+                case 'all':
+                default:
+                    return { ...completeData };
             }
-            if (earningsData && earningsData.length > 0) {
-                var earningsTotal = earningsData.reduce((a, b) => a + b, 0);
-                document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
+
+            // Filter data for predefined ranges
+            completeData.dates.forEach((date, index) => {
+                if (date >= startDate) {
+                    filtered.orders.push(completeData.orders[index]);
+                    filtered.earnings.push(completeData.earnings[index]);
+                    filtered.refunds.push(completeData.refunds[index]);
+                    filtered.months.push(completeData.months[index]);
+                }
+            });
+
+            return filtered;
+        }
+
+        // Initialize or update chart
+        function initializeChart(type, data) {
+            const chartElement = document.querySelector("#customer_impression_charts");
+            if (!chartElement) {
+                console.error("Chart container not found!");
+                return;
             }
-            if (refundsData && refundsData.length > 0) {
-                var refundsTotal = refundsData.reduce((a, b) => a + b, 0);
-                document.querySelector('[data-target="367"]').innerText = refundsTotal;
+
+            // Destroy existing chart
+            if (currentChart) {
+                currentChart.destroy();
             }
-        }, 100);
+
+            // Update chart configuration with current data
+            const options = JSON.parse(JSON.stringify(chartConfigs[type]));
+            options.series[0].data = data.orders;
+            options.series[1].data = data.earnings;
+            options.series[2].data = data.refunds;
+            options.xaxis.categories = data.months;
+
+            // Create new chart
+            currentChart = new ApexCharts(chartElement, options);
+            currentChart.render();
+            currentChartType = type;
+
+            // Update button states
+            updateButtonStates(type, currentFilter);
+        }
+
+        // Update button active states
+        function updateButtonStates(chartType, filterType) {
+            // Update chart type buttons
+            document.querySelectorAll('.chart-switcher').forEach(button => {
+                if (button.dataset.chartType === chartType) {
+                    button.classList.remove('btn-soft-secondary');
+                    button.classList.add('btn-soft-primary');
+                } else {
+                    button.classList.remove('btn-soft-primary');
+                    button.classList.add('btn-soft-secondary');
+                }
+            });
+
+            // Update time filter buttons
+            document.querySelectorAll('.time-filter').forEach(button => {
+                if (button.dataset.filter === filterType) {
+                    button.classList.remove('btn-soft-secondary');
+                    button.classList.add('btn-soft-primary');
+                } else {
+                    button.classList.remove('btn-soft-primary');
+                    button.classList.add('btn-soft-secondary');
+                }
+            });
+        }
+
+        // Update counters
+        function updateCounters(data) {
+            setTimeout(function() {
+                if (data.orders && data.orders.length > 0) {
+                    const ordersTotal = data.orders.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="7585"]').innerText = ordersTotal.toLocaleString();
+                }
+                if (data.earnings && data.earnings.length > 0) {
+                    const earningsTotal = data.earnings.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
+                }
+                if (data.refunds && data.refunds.length > 0) {
+                    const refundsTotal = data.refunds.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="367"]').innerText = refundsTotal;
+                }
+                
+                // Update conversation ratio (you can modify this calculation)
+                if (data.orders && data.orders.length > 0 && data.earnings && data.earnings.length > 0) {
+                    const avgOrderValue = data.earnings.reduce((a, b) => a + b, 0) / data.orders.reduce((a, b) => a + b, 0);
+                    const conversationRatio = (avgOrderValue * 0.1).toFixed(2); // Example calculation
+                    document.querySelector('[data-target="18.92"]').innerText = conversationRatio;
+                }
+            }, 100);
+        }
+
+        // Apply time filter
+        function applyTimeFilter(filterType, customStart = null, customEnd = null) {
+            filteredData = filterData(filterType, customStart, customEnd);
+            currentFilter = filterType;
+            initializeChart(currentChartType, filteredData);
+            updateCounters(filteredData);
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.chart-switcher').forEach(button => {
+            button.addEventListener('click', function() {
+                const chartType = this.dataset.chartType;
+                currentChartType = chartType;
+                initializeChart(chartType, filteredData);
+            });
+        });
+
+        document.querySelectorAll('.time-filter').forEach(button => {
+            button.addEventListener('click', function() {
+                const filterType = this.dataset.filter;
+                if (filterType === 'custom') {
+                    // Show custom date modal
+                    const modal = new bootstrap.Modal(document.getElementById('customDateModal'));
+                    modal.show();
+                } else {
+                    applyTimeFilter(filterType);
+                }
+            });
+        });
+
+        // Custom date range application
+        document.getElementById('applyCustomDate').addEventListener('click', function() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Start date cannot be after end date');
+                return;
+            }
+
+            applyTimeFilter('custom', startDate, endDate);
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('customDateModal'));
+            modal.hide();
+        });
+
+        // Set default dates in custom modal
+        document.getElementById('customFilterBtn').addEventListener('click', function() {
+            const now = new Date();
+            const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+            
+            document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = now.toISOString().split('T')[0];
+        });
+
+        // Initialize with default chart and filter
+        applyTimeFilter(currentFilter);
+
+        // Debug logs
+        console.log("Complete Data:", completeData);
+        console.log("Filtered Data:", filteredData);
     });
 </script>
 @endpush
-
