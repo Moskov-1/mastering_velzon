@@ -68,13 +68,17 @@
                 <!--end row-->
 
                 <!-- stat 1 -->
-                {{-- @include('backend.partials.stat-top') --}}
+                @include('backend.partials.stat-top')
                 <!-- end row-->
 
+                {{-- sales - months --}}
+                @include('backend.partials.charts.sales-months')
                 <!-- chart 2 : best & top sellers-->
-                {{-- @include('backend.partials.chart-2') --}}
+                @include('backend.partials.chart-2')
                 <!-- end row-->
+                
 
+                
             </div>
             <!-- end .h-100-->
 
@@ -94,3 +98,290 @@
     <!--end back-to-top-->
 
 @endsection
+
+{{-- @push('scripts-bottom')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var chartElement = document.querySelector("#customer_impression_charts");
+            if (!chartElement) {
+                console.error("Chart container not found!");
+                return;
+            }
+
+            var ordersData = @json($orders);
+            var earningsData = @json($earnings);
+            var refundsData = @json($refunds);
+            var months = @json($months);
+            
+            console.log("Orders Data:", ordersData);
+            console.log("Earnings Data:", earningsData);
+            console.log("Refunds Data:", refundsData);
+            console.log("Months:", months);
+
+            var options = {
+                chart: {
+                    height: 370,
+                    type: "area",
+                    toolbar: { show: false },
+                    zoom: { enabled: false }
+                },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 2 },
+                series: [
+                    {
+                        name: "Orders",
+                        data: ordersData
+                    },
+                    {
+                        name: "Earnings",
+                        data: earningsData
+                    },
+                    {
+                        name: "Refunds",
+                        data: refundsData
+                    }
+                ],
+                colors: ["#405189", "#0ab39c", "#f06548"],
+                xaxis: {
+                    categories: months
+                },
+                legend: { position: 'bottom' },
+                fill: { opacity: 0.1 }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
+            chart.render();
+
+            // Update the counter values after chart is rendered
+            setTimeout(function() {
+                if (ordersData && ordersData.length > 0) {
+                    var ordersTotal = ordersData.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="7585"]').innerText = ordersTotal;
+                }
+                if (earningsData && earningsData.length > 0) {
+                    var earningsTotal = earningsData.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
+                }
+                if (refundsData && refundsData.length > 0) {
+                    var refundsTotal = refundsData.reduce((a, b) => a + b, 0);
+                    document.querySelector('[data-target="367"]').innerText = refundsTotal;
+                }
+            }, 100);
+        });
+    </script>
+@endpush --}}
+
+{{-- @push('scripts-bottom')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var chartElement = document.querySelector("#customer_impression_charts");
+        if (!chartElement) {
+            console.error("Chart container not found!");
+            return;
+        }
+
+        var ordersData = @json($orders);
+        var earningsData = @json($earnings);
+        var refundsData = @json($refunds);
+        var months = @json($months);
+
+        var options = {
+            chart: {
+                height: 370,
+                type: "line",
+                toolbar: { show: false },
+                zoom: { enabled: false }
+            },
+            dataLabels: { 
+                enabled: false 
+            },
+            stroke: { 
+                width: [0, 2, 2],
+                curve: 'smooth'
+            },
+            series: [
+                {
+                    name: "Orders",
+                    type: "column",
+                    data: ordersData
+                },
+                {
+                    name: "Earnings",
+                    type: "area", // Filled area
+                    data: earningsData
+                },
+                {
+                    name: "Refunds",
+                    type: "line", // Regular line
+                    data: refundsData
+                }
+            ],
+            colors: ["#2ebdd6ff", "#0ab39c", "#f06548"],
+            xaxis: {
+                categories: months
+            },
+            legend: { 
+                position: 'bottom'
+            },
+            fill: {
+                type: ['solid', 'gradient', 'solid'],
+                opacity: [0.8, 0.1, 0],
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#0ab39c'],
+                    inverseColors: false,
+                    opacityFrom: 0.3,
+                    opacityTo: 0.1,
+                    stops: [0, 90, 100]
+                }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                    borderRadius: 4
+                }
+            },
+            markers: {
+                size: [0, 0, 4], // Only refunds have markers
+                colors: ['#405189', '#0ab39c', '#f06548'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: {
+                    size: 6
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
+        chart.render();
+
+        // Update counters (same as before)
+        setTimeout(function() {
+            if (ordersData && ordersData.length > 0) {
+                var ordersTotal = ordersData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="7585"]').innerText = ordersTotal;
+            }
+            if (earningsData && earningsData.length > 0) {
+                var earningsTotal = earningsData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
+            }
+            if (refundsData && refundsData.length > 0) {
+                var refundsTotal = refundsData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="367"]').innerText = refundsTotal;
+            }
+        }, 100);
+    });
+</script>
+@endpush --}}
+
+@push('scripts-bottom')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var chartElement = document.querySelector("#customer_impression_charts");
+        if (!chartElement) {
+            console.error("Chart container not found!");
+            return;
+        }
+
+        var ordersData = @json($orders);
+        var earningsData = @json($earnings);
+        var refundsData = @json($refunds);
+        var months = @json($months);
+
+        var options = {
+            chart: {
+                height: 370,
+                type: "line",
+                toolbar: { show: false },
+                zoom: { enabled: false }
+            },
+            dataLabels: { 
+                enabled: false 
+            },
+            stroke: { 
+                width: [0, 3, 2], // No stroke for bar, stroke for lines
+                curve: 'smooth',
+                dashArray: [0, 0, 5] // Solid for bars and earnings, dotted for refunds
+            },
+            series: [
+                {
+                    name: "Orders",
+                    type: "column", // Bar chart
+                    data: ordersData
+                },
+                {
+                    name: "Earnings",
+                    type: "area", // Line chart
+                    data: earningsData
+                },
+                {
+                    name: "Refunds",
+                    type: "area", // Area chart with dotted lines
+                    data: refundsData
+                }
+            ],
+            colors: ["#405189", "#0ab39c", "#f06548"],
+            xaxis: {
+                categories: months
+            },
+            legend: { 
+                position: 'bottom'
+            },
+            fill: {
+                type: ['solid', 'solid', 'gradient'],
+                opacity: [0.8, 0, 0.1],
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.3,
+                    gradientToColors: ['#f06548'],
+                    inverseColors: false,
+                    opacityFrom: 0.2,
+                    opacityTo: 0.05,
+                    stops: [0, 90, 100]
+                }
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '30%', // Thinner bars (was 60%)
+                    borderRadius: 3
+                }
+            },
+            markers: {
+                size: [0, 5, 0], // No markers for bars and refunds area, markers for earnings line
+                colors: ['#405189', '#0ab39c', '#f06548'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: {
+                    size: 7
+                }
+            },
+            tooltip: {
+                shared: true,
+                intersect: false
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#customer_impression_charts"), options);
+        chart.render();
+
+        // Update the counter values after chart is rendered
+        setTimeout(function() {
+            if (ordersData && ordersData.length > 0) {
+                var ordersTotal = ordersData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="7585"]').innerText = ordersTotal;
+            }
+            if (earningsData && earningsData.length > 0) {
+                var earningsTotal = earningsData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="22.89"]').innerText = (earningsTotal / 1000).toFixed(2);
+            }
+            if (refundsData && refundsData.length > 0) {
+                var refundsTotal = refundsData.reduce((a, b) => a + b, 0);
+                document.querySelector('[data-target="367"]').innerText = refundsTotal;
+            }
+        }, 100);
+    });
+</script>
+@endpush
