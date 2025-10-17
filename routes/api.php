@@ -20,5 +20,11 @@ Route::group([
     Route::post('/password/resend-otp', [AuthController::class, 'resendOtp']);   
     Route::post('/password/verify-otp', [AuthController::class, 'verifyOtp']);
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/payments/create-intent', [PaymentController::class, 'createIntent']);
+    Route::post('/payments/confirm', [PaymentController::class, 'confirm']);
+});
 
+// Webhook route (without auth)
+Route::post('/webhook/stripe', [PaymentController::class, 'webhook']);
 require_once __DIR__ .'/frontend/dashboard.php';
