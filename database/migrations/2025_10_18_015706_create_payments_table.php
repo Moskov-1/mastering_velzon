@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             
             // Relationships
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('payment_method_id')->nullable()->constrained('user_payment_methods')->onDelete('set null');
+            $table->foreignId('payment_method_id')->nullable()->constrained('payment_methods')->onDelete('set null');
             
             // Gateway information
             $table->string('payment_gateway')->default('stripe');
@@ -75,7 +75,7 @@ return new class extends Migration
             
             // Indexes
             $table->index(['user_id', 'status']);
-            $table->index(['order_id']);
+            // $table->index(['order_id']);
             $table->index(['gateway_payment_intent_id']);
             $table->index(['gateway_charge_id']);
             $table->index(['created_at', 'status']);
