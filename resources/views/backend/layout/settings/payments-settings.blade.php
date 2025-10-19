@@ -14,7 +14,7 @@
         <li class="nav-item">
             <button class="nav-link" id="mail-tab" data-bs-toggle="tab"
                     data-bs-target="#mail" type="button" role="tab"
-                    data-uri="{{ route('backend.settings.payments.stripe.test') }}">Mail</button>
+                    data-uri="{{ route('backend.settings.payments.stripe.test') }}">SSL COMMERZ</button>
         </li>
         <li class="nav-item">
             <button class="nav-link" id="other-tab" data-bs-toggle="tab"
@@ -39,7 +39,7 @@
                            value="{{ env('STRIPE_SECRET') }}" placeholder="Enter Stripe Secret">
                 </div>
                  <div class="mb-3">
-                    <label class="form-label">Stripe Secret</label>
+                    <label class="form-label">Stripe WEBHOOK Secret</label>
                     <input type="text" name="stripe_websocket_secret" class="form-control"
                            value="{{ env('STRIPE_WEBHOOK_SECRET') }}" placeholder="Enter Stripe Secret">
                 </div>
