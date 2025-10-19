@@ -28,6 +28,6 @@ Route::group(["prefix"=> "settings", "as"=> "settings."], function () {
     Route::controller(StripeSettingsController::class)->prefix('payments/')->name('payments.stripe.')->group(function(){
         Route::get('', 'index')->name('index');
         Route::put('update', 'update')->name('update');
-        Route::post('test', 'test')->name('test');
+        Route::put('test', 'test')->name('test');
     });
 });

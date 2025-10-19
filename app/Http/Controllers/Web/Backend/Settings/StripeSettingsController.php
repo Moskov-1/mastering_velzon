@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 class StripeSettingsController extends Controller
 {
     public function index(){
-        return view("backend.layout.settings.payment-settings");
+        return view("backend.layout.settings.payments-settings");
     }
 
     public function update(Request $request) {
@@ -37,9 +37,18 @@ class StripeSettingsController extends Controller
 
             File::put(base_path('.env'), $envContent);
 
-            return back()->with('success', 'Updated successfully');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update ... '.$e->getMessage());
+            return response()->json([
+                'success'=> true,
+                'message' => 'stripe data updated'
+            ], 201);
+
+        } 
+        catch (\Exception $e) {
+
+            return response()->json([
+                'success'=> false,
+                'message' => 'error', 'Failed to update ... '.$e->getMessage()
+            ], 422);
         }
     }
 

@@ -9,17 +9,17 @@
         <li class="nav-item">
             <button class="nav-link active" id="stripe-tab" data-bs-toggle="tab"
                     data-bs-target="#stripe" type="button" role="tab"
-                    data-uri="{{ route('settings.payments.stripe.update') }}">Stripe</button>
+                    data-uri="{{ route('backend.settings.payments.stripe.update') }}">Stripe</button>
         </li>
         <li class="nav-item">
             <button class="nav-link" id="mail-tab" data-bs-toggle="tab"
                     data-bs-target="#mail" type="button" role="tab"
-                    data-uri="{{ route('settings.payments.stripe.test') }}">Mail</button>
+                    data-uri="{{ route('backend.settings.payments.stripe.test') }}">Mail</button>
         </li>
         <li class="nav-item">
             <button class="nav-link" id="other-tab" data-bs-toggle="tab"
                     data-bs-target="#other" type="button" role="tab"
-                    data-uri="{{ route('settings.payments.stripe.test') }}">Other</button>
+                    data-uri="{{ route('backend.settings.payments.stripe.test') }}">Other</button>
         </li>
     </ul>
 
@@ -37,6 +37,11 @@
                     <label class="form-label">Stripe Secret</label>
                     <input type="text" name="stripe_secret" class="form-control"
                            value="{{ env('STRIPE_SECRET') }}" placeholder="Enter Stripe Secret">
+                </div>
+                 <div class="mb-3">
+                    <label class="form-label">Stripe Secret</label>
+                    <input type="text" name="stripe_websocket_secret" class="form-control"
+                           value="{{ env('STRIPE_WEBHOOK_SECRET') }}" placeholder="Enter Stripe Secret">
                 </div>
                 <button type="submit" class="btn btn-primary">Save Stripe</button>
             </form>
@@ -114,13 +119,14 @@
 
                 const $form = $(this);
                 const activeTab = $('#settingsTabs .nav-link.active');
-                const url = activeTab.data('uri');
+                const $url = activeTab.data('uri');
+                console.log($url, $form.serialize())
                 //const csrf = $('meta[name="csrf-token"]').attr('content');
                 const csrf = '{{ csrf_token() }}';
 
                 $.ajax({
-                    url: url,
-                    method: 'POST',
+                    url: $url,
+                    method: 'PUT',
                     data: $form.serialize(),
                     headers: { 'X-CSRF-TOKEN': csrf },
                     success: function (res) {
@@ -132,6 +138,7 @@
                         }, 800);
                     },
                     error: function (xhr) {
+                        console.log('failed ')
                         $('#responseBox').text('Error: ' + xhr.responseText);
                     }
                 });

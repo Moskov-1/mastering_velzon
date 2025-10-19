@@ -125,6 +125,9 @@
                             <li class="nav-item">
                                 <a href="{{route('backend.settings.mail.index')}}" class="nav-link {{getPageStatus('backend.settings.mail.*')}}" data-key="t-level-1.1">  Mail Settings</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('backend.settings.payments.stripe.index')}}" class="nav-link {{getPageStatus('backend.settings.payments.*')}}" data-key="t-level-1.1">  Payment Settings</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
