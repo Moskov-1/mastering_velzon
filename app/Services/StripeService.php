@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Services\PaymentGateway;
+namespace App\Services;
 
-use App\DTO\PaymentIntentData;
+use Stripe\Refund;
 use Stripe\Stripe;
+use Stripe\Webhook;
 use Stripe\PaymentIntent;
-use Stripe\Exception\ApiErrorException;
+use App\DTO\PaymentIntentData;
 use Illuminate\Support\Facades\Log;
+use Stripe\Exception\ApiErrorException;
+use App\Interfaces\PaymentGatewayInterface;
 
 class StripeService implements PaymentGatewayInterface
 {
     public function __construct()
     {
         Stripe::setApiKey(config('stripe.secret'));
-        Stripe::setApiVersion(config('stripe.version', '2023-10-16'));
+        // Stripe::setApiVersion(config('stripe.version', '2023-10-16'));
     }
 
     public function createPaymentIntent(PaymentIntentData $paymentData): array
@@ -112,7 +115,7 @@ class StripeService implements PaymentGatewayInterface
                 $params['amount'] = $amount * 100; // Convert to cents
             }
             
-            $refund = \Stripe\Refund::create($params);
+            $refund = Refund::create($params);
             
             return [
                 'success' => true,
@@ -133,7 +136,7 @@ class StripeService implements PaymentGatewayInterface
     public function handleWebhook(array $payload, string $signature): array
     {
         try {
-            $event = \Stripe\Webhook::constructEvent(
+            $event = Webhook::constructEvent(
                 $payload,
                 $signature,
                 config('stripe.webhook_secret')

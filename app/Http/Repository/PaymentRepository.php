@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\Eloquent;
+namespace App\Http\Repository;
 
 use App\Models\Payment;
-use App\Repositories\Contracts\PaymentRepositoryInterface;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use App\Interfaces\PaymentRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentRepository implements PaymentRepositoryInterface
 {

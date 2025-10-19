@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Services\StripeService;
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\Contracts\PaymentRepositoryInterface;
-use App\Repositories\Eloquent\PaymentRepository;
-use App\Services\PaymentGateway\PaymentGatewayInterface;
-use App\Services\PaymentGateway\StripeService;
+use App\Http\Repository\PaymentRepository;
+use App\Interfaces\PaymentGatewayInterface;
+use App\Interfaces\PaymentRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {

@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Repositories\Contracts\PaymentRepositoryInterface;
-use App\Services\PaymentGateway\PaymentGatewayInterface;
-use App\DTO\PaymentIntentData;
-use App\Models\Payment;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use App\Models\Payment;
+use App\DTO\PaymentIntentData;
+use Illuminate\Support\Facades\DB;
+use App\Interfaces\PaymentGatewayInterface;
+use App\Interfaces\PaymentRepositoryInterface;
 
 class PaymentService
 {

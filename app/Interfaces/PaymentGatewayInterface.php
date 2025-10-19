@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\PaymentGateway;
+namespace App\Interfaces;
 
 use App\DTO\PaymentIntentData;
 

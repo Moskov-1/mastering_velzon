@@ -1,9 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Interfaces;
 
 use App\Models\Payment;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 interface PaymentRepositoryInterface
 {
     public function findById(string $id): ?Payment;
