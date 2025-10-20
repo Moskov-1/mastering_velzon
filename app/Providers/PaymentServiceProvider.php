@@ -3,21 +3,21 @@
 namespace App\Providers;
 
 use App\Services\StripeService;
+use App\Services\StripePaymentService;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Repository\PaymentRepository;
 use App\Interfaces\PaymentGatewayInterface;
+use App\Interfaces\PaymentServiceInterface;
 use App\Interfaces\PaymentRepositoryInterface;
 
-class RepositoryServiceProvider extends ServiceProvider
+class PaymentServiceProvider  extends ServiceProvider
 {
     public function register(): void
     {
-        // Repositories
         $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
-        
-        // Services
-        $this->app->bind(PaymentGatewayInterface::class, StripeService::class);
+        $this->app->bind(PaymentServiceInterface::class, StripePaymentService::class);
     }
+
 
     public function boot(): void
     {

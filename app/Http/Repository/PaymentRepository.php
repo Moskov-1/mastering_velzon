@@ -3,6 +3,7 @@
 namespace App\Http\Repository;
 
 use App\Models\Payment;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\PaymentRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,9 +15,9 @@ class PaymentRepository implements PaymentRepositoryInterface
         return Payment::find($id);
     }
 
-    public function findByGatewayId(string $gatewayId): ?Payment
+    public function findByGatewayIntentId(string $gatewayPaymentIntentId): ?Payment
     {
-        return Payment::where('gateway_payment_id', $gatewayId)->first();
+        return Payment::where('gateway_payment_intent_id', $gatewayPaymentIntentId)->first();
     }
 
     public function create(array $data): Payment
@@ -29,30 +30,67 @@ class PaymentRepository implements PaymentRepositoryInterface
         return $payment->update($data);
     }
 
-    public function delete(Payment $payment): bool
+    public function updateStatus(Payment $payment, string $status): bool
     {
-        return $payment->delete();
+        $updateData = ['status' => $status];
+        
+        // Set timestamp based on status
+        switch ($status) {
+            case 'succeeded':
+                $updateData['confirmed_at'] = now();
+                break;
+            case 'canceled':
+                $updateData['canceled_at'] = now();
+                break;
+            case 'failed':
+                $updateData['failed_at'] = now();
+                break;
+            case 'requires_capture':
+                $updateData['captured_at'] = now();
+                break;
+        }
+
+        return $payment->update($updateData);
     }
 
-    public function getUserPayments(int $userId): Collection
+    public function findPaymentMethodById(string $id): ?PaymentMethod
     {
-        return Payment::where('user_id', $userId)
-            ->orderBy('created_at', 'desc')
+        return PaymentMethod::find($id);
+    }
+
+    public function findPaymentMethodByGatewayId(string $gatewayId): ?PaymentMethod
+    {
+        return PaymentMethod::where('payment_method_id', $gatewayId)->first();
+    }
+
+    public function createPaymentMethod(array $data): PaymentMethod
+    {
+        return PaymentMethod::create($data);
+    }
+
+    public function updatePaymentMethod(PaymentMethod $paymentMethod, array $data): bool
+    {
+        return $paymentMethod->update($data);
+    }
+
+    public function getUserPaymentMethods(int $userId)
+    {
+        return PaymentMethod::where('user_id', $userId)
+            ->where('is_active', true)
+            ->orderBy('is_default', 'desc')
             ->get();
     }
 
-    public function getRecentPayments(int $limit = 10): Collection
+    public function setDefaultPaymentMethod(int $userId, string $paymentMethodId): bool
     {
-        return Payment::with('user')
-            ->orderBy('created_at', 'desc')
-            ->limit($limit)
-            ->get();
-    }
+        // Remove default from all user's payment methods
+        PaymentMethod::where('user_id', $userId)
+            ->where('is_default', true)
+            ->update(['is_default' => false]);
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
-        return Payment::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+        // Set new default
+        return PaymentMethod::where('id', $paymentMethodId)
+            ->where('user_id', $userId)
+            ->update(['is_default' => true]);
     }
 }

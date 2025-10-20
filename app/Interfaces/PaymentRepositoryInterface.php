@@ -3,17 +3,24 @@
 namespace App\Interfaces;
 
 use App\Models\Payment;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 
 interface PaymentRepositoryInterface
 {
     public function findById(string $id): ?Payment;
-    public function findByGatewayId(string $gatewayId): ?Payment;
+    public function findByGatewayIntentId(string $gatewayPaymentIntentId): ?Payment;
     public function create(array $data): Payment;
     public function update(Payment $payment, array $data): bool;
-    public function delete(Payment $payment): bool;
-    public function getUserPayments(int $userId): Collection;
-    public function getRecentPayments(int $limit = 10): Collection;
-    public function paginate(int $perPage = 15): LengthAwarePaginator;
+    public function updateStatus(Payment $payment, string $status): bool;
+    
+    // Payment Method methods
+    public function findPaymentMethodById(string $id): ?PaymentMethod;
+    public function findPaymentMethodByGatewayId(string $gatewayId): ?PaymentMethod;
+    public function createPaymentMethod(array $data): PaymentMethod;
+    public function updatePaymentMethod(PaymentMethod $paymentMethod, array $data): bool;
+    public function getUserPaymentMethods(int $userId);
+    public function setDefaultPaymentMethod(int $userId, string $paymentMethodId): bool;
 }
