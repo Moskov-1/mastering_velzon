@@ -26,14 +26,14 @@ use Intervention\Image\Facades\Image;
         return Route::is($url) ? $text : '';
         return Route::is($url) ? 'active' : '';
     }
-    function fileUpdate($file, string $folder, string $old = null, $option = null){
+    function fileUpdate($file, string $folder, ?string $old= null , $option = null){
         if($old){
             fileDelete($old);
         }
         return fileUpload($file,  $folder, $option);
     }
 
-    function fileUpload($file, string $folder, string $option = null): ?string
+    function fileUpload($file, string $folder, ?string $option = null): ?string
     {
         if (!$file || !$file->isValid()) {
             return null;
@@ -71,7 +71,7 @@ use Intervention\Image\Facades\Image;
         return 'public_uploads/' . $folder . '/' . $imageName;
     }
 
-    function fileUpload_old($file, string $folder, string $option = null): ?string
+    function fileUpload_old($file, string $folder, ?string $option = null): ?string
     {
         if (!$file->isValid()) {
             return null;

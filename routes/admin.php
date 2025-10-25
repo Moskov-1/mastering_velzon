@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Web\Backend\CategoryController;
 use App\Http\Controllers\Web\Backend\SystemUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -24,6 +25,10 @@ Route::group([ 'as'=>'backend.'], function () {
         Route::resource('faq', FaqController::class)->except(['show']);
     });
 
+    Route::group(['as'=>'category.'], function(){
+        Route::post('category/status/{id}', [CategoryController::class,'status'])->name('category.status');
+        Route::resource('category', CategoryController::class)->except(['show']);
+    });
 
     Route::post('page/status/{id}', [PageController::class,'status'])->name('page.status');
     Route::resource('page', PageController::class)->except(['show']);
