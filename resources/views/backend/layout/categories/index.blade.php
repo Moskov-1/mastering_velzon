@@ -162,7 +162,7 @@
         }
         // Status Change
         function statusChange(id) {
-            let url = "{{ route('backend.category', ':id') }}";
+            let url = "{{ route('backend.category.status', ':id') }}";
             $.ajax({
                 type: "POST",
                 url: url.replace(':id', id),

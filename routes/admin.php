@@ -25,7 +25,7 @@ Route::group([ 'as'=>'backend.'], function () {
         Route::resource('faq', FaqController::class)->except(['show']);
     });
 
-    Route::group(['as'=>'category.'], function(){
+    Route::group([], function(){
         Route::post('category/status/{id}', [CategoryController::class,'status'])->name('category.status');
         Route::resource('category', CategoryController::class)->except(['show']);
     });

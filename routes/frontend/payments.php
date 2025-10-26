@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\Pasyments\PaymentController;
+use App\Http\Controllers\API\Payments\PaymentController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use App\Http\Controllers\API\Payments\StripeWebhookController;
 

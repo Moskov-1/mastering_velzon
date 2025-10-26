@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Pasyments;
+namespace App\Http\Controllers\API\Payments;
 
 use Illuminate\Http\Request;
 use App\Interfaces\PaymentServiceInterface;
