@@ -142,7 +142,7 @@
         }
         // Status Change
         function statusChange(id) {
-            let url = '{{ route('backend.system-user.status', ':id') }}';
+            let url = "{{ route('backend.system-user.status', ':id') }}";
             $.ajax({
                 type: "POST",
                 url: url.replace(':id', id),
@@ -196,7 +196,7 @@
 
         // Delete Button
         function deleteItem(id) {
-            let url = '{{ route('backend.system-user.destroy', ':id') }}';
+            let url = "{{ route('backend.system-user.destroy', ':id') }}";
             let csrfToken = '{{ csrf_token() }}';
             $.ajax({
                 type: "DELETE",

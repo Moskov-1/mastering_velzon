@@ -19,15 +19,17 @@
             <div class="card">
                 <div class="card-body">
                      <div class="d-flex justify-content-end mb-2">
-                        <a href="{{ route('backend.system-user.create') }}" class="btn btn-primary">+ Add User</a>
+                        <a href="{{ route('backend.category.create') }}" class="btn btn-primary">+ Add Category</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered text-nowrap border-bottom w-100" id="datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Image</th>
                                     <th>Name</th>
-                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Parent</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -78,7 +80,7 @@
                     pagingType: "full_numbers",
                     dom: "<'row justify-content-between table-topbar'<'col-md-2 col-sm-4 px-0'l><'col-md-2 col-sm-4 px-0'f>>tipr",
                     ajax: {
-                        url: "{{ route('backend.system-user.index') }}",
+                        url: "{{ route('backend.category.index') }}",
                         type: "GET",
                     },
 
@@ -88,6 +90,12 @@
                         orderable: false,
                         searchable: false
                     },
+                    {
+                        data: 'Image',
+                        name: 'Image',
+                        orderable: true,
+                        searchable: true
+                    },
                         {
                             data: 'name',
                             name: 'name',
@@ -95,8 +103,20 @@
                             searchable: true
                         },
                         {
-                            data: 'email',
-                            name: 'email',
+                            data: 'type',
+                            name: 'type',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'parent',
+                            name: 'parent',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'type',
+                            name: 'type',
                             orderable: true,
                             searchable: true
                         },
@@ -142,7 +162,7 @@
         }
         // Status Change
         function statusChange(id) {
-            let url = '{{ route('backend.system-user.status', ':id') }}';
+            let url = "{{ route('backend.category', ':id') }}";
             $.ajax({
                 type: "POST",
                 url: url.replace(':id', id),
@@ -187,7 +207,7 @@
         }
 
         function edit(id) {
-            let url = "{{ route('backend.system-user.edit', ':id') }}";
+            let url = "{{ route('backend.category.edit', ':id') }}";
             url = url.replace(':id', id);
 
             window.location.href = url;
@@ -196,7 +216,7 @@
 
         // Delete Button
         function deleteItem(id) {
-            let url = '{{ route('backend.system-user.destroy', ':id') }}';
+            let url = "{{ route('backend.category.destroy', ':id') }}";
             let csrfToken = '{{ csrf_token() }}';
             $.ajax({
                 type: "DELETE",
