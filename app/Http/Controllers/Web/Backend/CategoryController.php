@@ -51,4 +51,8 @@ class CategoryController extends Controller
         }
         return view("backend.layout.categories.index");
     }
+
+    public function create(){
+        return view("backend.layout.categories.form");
+    }
 }

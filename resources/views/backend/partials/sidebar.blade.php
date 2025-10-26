@@ -42,31 +42,33 @@
                             </li>
                         </ul>
                     </div>
-                </li> <!-- end Dashboard Menu -->
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link menu-link  {{getPageStatus('backend.dashboard.*', 'collapsed active')}}" href="#sidebarDashboards"  role="button" >
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Something</span>
+                    </a>
+                </li>
+                <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link {{getPageStatus('backend.feature.*', 'collapsed active')}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Features</span>
                     </a>
                     <div class="collapse menu-dropdown {{getPageStatus('backend.feature.*','show')}}" id="sidebarApps">
+                        
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" 
+                                <a href="#sidebarProjects" class="nav-link"  role="button" aria-expanded="false" 
                                 aria-controls="sidebarProjects" data-key="t-projects">
                                     Projects
                                 </a>
-                                <div class="collapse menu-dropdown " id="sidebarProjects">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link" data-key="t-list"> List
-                                            {{-- <a href="{{route('backend.project.index')}}" class="nav-link" data-key="t-list"> List --}}
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            {{-- <a href="{{route('backend.project.create')}}" class="nav-link" data-key="t-create-project"> Create Project </a> --}}
-                                            <a href="#" class="nav-link" data-key="t-create-project"> Create Project </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sidebarCategories" class="nav-link"  role="button" aria-expanded="false" 
+                                aria-controls="sidebarCategories" data-key="t-categories">
+                                    Categories
+                                </a>
+                                
                             </li>
                             <li class="nav-item">
                                 <a href="#sidebarTasks" class="nav-link {{getPageStatus('backend.feature.faq.*','active')}}" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTasks" 
