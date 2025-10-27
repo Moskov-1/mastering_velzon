@@ -65,7 +65,48 @@ class CategoryController extends Controller
         $request ->validate([
             "name"=> "required",
             "type"=> "required",    
-            "parent_id"=> "sometimes|exists:category,id",
+            "parent_id"=> "nullable|exists:categories,id",
         ]);
+
+        $category = Category::create($request->only(["name","type","parent_id",'status']));
+
+        return redirect()->route('backend.feature.category.index')->with('success','category created successfully');
+    }
+
+    public function edit(Category $category){
+         $data['parents'] = Category::all()->except($category->id);
+        $data['statuses'] = Category::_status();
+        $data['types'] = Category::_types();
+        $data['category'] = $category;
+        return view("backend.layout.categories.form", $data);
+    }
+
+    public function update(Request $request, Category $category){
+        $request ->validate([
+            "name"=> "required",
+            "type"=> "required",    
+            "parent_id"=> "nullable|not_in:{$category->id}|exists:categories,id",
+        ]);
+
+        $category->update($request->only(["name","type","parent_id","status"]));
+
+        return redirect()->route('backend.feature.category.index')->with('success','category updated successfully');
+    }
+
+    public function destroy(Category $category){
+        $category->delete();
+        return redirect()->route('backend.feature.category.index')->with('success','category deleted successfully');
+    }
+
+    public function status($id){
+        $category = Category::find($id);
+        $category->status = !$category->status;
+        $category->save();
+
+        return response()->json([
+            'success'=> true,
+            'message'=> 'status updated',
+            ]);
+
     }
 }
