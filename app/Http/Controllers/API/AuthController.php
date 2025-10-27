@@ -60,7 +60,7 @@ class AuthController extends BaseController
         $token = $this->respondWithToken($token);
         
         $response = [
-            'success' => true,
+            'success' => true, 
             'token'    => $token,
             'role' => auth('api')->user()->role,
             'message' => 'User login successfully.',
