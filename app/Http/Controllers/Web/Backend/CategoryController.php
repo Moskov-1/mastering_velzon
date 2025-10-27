@@ -14,10 +14,10 @@ class CategoryController extends Controller
             $data = Category::latest()->get();
             return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('image', function ($data) {
-                $avatar = $data->avatar ? asset($data->avatar) : asset('assests/images/users/no-image.jpg');
-                return '<img src="' . $avatar . '" width="60" alt="Article Image"/>';
-            })
+            // ->addColumn('image', function ($data) {
+            //     $avatar = $data->avatar ? asset($data->avatar) : asset('assests/images/users/no-image.jpg');
+            //     return '<img src="' . $avatar . '" width="60" alt="Article Image"/>';
+            // })
             ->addColumn('name', function($data){
                 return $data->name;
             })
@@ -25,7 +25,7 @@ class CategoryController extends Controller
                 return $data->type;
             })
             ->addColumn('parent', function($data){
-                return $data->parent->name;
+                return $data->parent->name ?? 'N/A';
             })
             
             ->addColumn('status', function ($data) {
@@ -46,13 +46,18 @@ class CategoryController extends Controller
                 </button>
             ';
             })
-            ->rawColumns(['page_title', 'page_content', 'status', 'action'])
-            ->make();
+            ->rawColumns(['parent', 'status', 'action'])
+            ->make(true);
         }
         return view("backend.layout.categories.index");
     }
 
     public function create(){
-        return view("backend.layout.categories.form");
+
+        $data['parents'] = Category::all();
+        $data['statuses'] = Category::_status();
+        $data['types'] = Category::_types();
+
+        return view("backend.layout.categories.form", $data);
     }
 }

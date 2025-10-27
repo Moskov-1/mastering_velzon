@@ -50,6 +50,7 @@
                 </li>
                 <!-- end Dashboard Menu -->
                 <li class="nav-item">
+                    <!-- <a class="nav-link menu-link {{getPageStatus('backend.feature.*', 'collapsed active')}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps"> -->
                     <a class="nav-link menu-link {{getPageStatus('backend.feature.*', 'collapsed active')}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Features</span>
                     </a>
@@ -64,7 +65,7 @@
                                 
                             </li>
                             <li class="nav-item">
-                                <a href="#sidebarCategories" class="nav-link"  role="button" aria-expanded="false" 
+                                <a href="{{ route('backend.feature.category.index') }}" class="nav-link" role="button" aria-expanded="false" 
                                 aria-controls="sidebarCategories" data-key="t-categories">
                                     Categories
                                 </a>
