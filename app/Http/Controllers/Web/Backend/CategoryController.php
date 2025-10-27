@@ -60,4 +60,12 @@ class CategoryController extends Controller
 
         return view("backend.layout.categories.form", $data);
     }
+
+    public function store(Request $request){
+        $request ->validate([
+            "name"=> "required",
+            "type"=> "required",    
+            "parent_id"=> "sometimes|exists:category,id",
+        ]);
+    }
 }

@@ -12,8 +12,13 @@
                     <li class="breadcrumb-item active">Category</li>
                 </ol>
             </div>
-
+            <div class="d-flex gap-2">
+                    <a href="{{ route('backend.feature.category.index') }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="mdi mdi-arrow-left"></i> Back
+                    </a>
+            </div>
         </div>
+        
     </div>
 </div>
 <!-- end page title -->
@@ -84,9 +89,9 @@
                                     <div class="col-md-5">
                                         <select class="form-control @error('status') is-invalid @enderror" id="status" name="status">
                                             <option value="">Select Status</option>
-                                            @foreach($statuses as $status)
+                                            @foreach($statuses as $key => $status)
                                             <option value="{{ $status }}" {{ old('status', @$category->status) == $status ? 'selected' : '' }}>
-                                                {{ ucfirst($status) }}
+                                                {{ $key }}
                                             </option>
                                             @endforeach
                                         </select>
