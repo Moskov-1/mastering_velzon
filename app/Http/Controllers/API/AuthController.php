@@ -57,9 +57,16 @@ class AuthController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
   
-        $success = $this->respondWithToken($token);
-   
-        return $this->sendResponse($success, 'User login successfully.');
+        $token = $this->respondWithToken($token);
+        
+        $response = [
+            'success' => true,
+            'token'    => $token,
+            'role' => auth('api')->user()->role,
+            'message' => 'User login successfully.',
+        ];
+ 
+        return response()->json($response, 200);
     }
   
     /** Get the authenticated User.
