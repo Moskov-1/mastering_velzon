@@ -1,4 +1,6 @@
 @extends('backend.master')
+@section('title', 'payment settings')
+
 @section('content')
 
 <div class="container py-5">

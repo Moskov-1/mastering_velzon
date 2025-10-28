@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Web\Frontend\PaymentController;
+use App\Http\Controllers\API\SocialLogin\SocialLoginController;
 
 Route::group([
     'middleware' => 'api',
@@ -15,6 +16,8 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api');
     Route::post('/profile', [AuthController::class, 'profile'])->middleware('auth:api');
 
+    //Continue with google and facebook login
+    Route::post('/social/login', [SocialLoginController::class, 'SocialLogin']);
     
     Route::post('/password/forgot', [AuthController::class, 'forgotPassword']);
     Route::post('/password/reset', [AuthController::class, 'resetPassword']);

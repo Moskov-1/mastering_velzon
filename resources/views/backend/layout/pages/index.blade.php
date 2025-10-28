@@ -1,4 +1,6 @@
 @extends('backend.master')
+@section('title', 'Pages')
+
 @section('content')
 {{-- PAGE-HEADER --}}
 <div class="page-header">

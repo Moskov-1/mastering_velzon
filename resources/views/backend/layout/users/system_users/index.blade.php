@@ -1,9 +1,11 @@
 @extends('backend.master')
+@section('title', 'System Users')
+
 @section('content')
 {{-- PAGE-HEADER --}}
 <div class="page-header">
     <div>
-        <h1 class="page-title">List of Dynamic Page</h1>
+        <h1 class="page-title">List of System Users</h1>
     </div>
     <div class="ms-auto pageheader-btn">
         <ol class="breadcrumb">

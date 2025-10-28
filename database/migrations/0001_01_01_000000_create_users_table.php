@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('password_reset_otp')->nullable();
             $table->string('password_reset_otp_is_verified')->default(false);
             $table->timestamp('password_reset_otp_expiry')->nullable();
+            
+            $table->geometry('location', subtype: 'point')->nullable();
+            $table->geometry('area', subtype: 'polygon')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

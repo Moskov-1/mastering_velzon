@@ -1,5 +1,5 @@
 @extends('backend.master')
-@section('title', 'Dashboard | Velzon - Admin & Dashboard Template')
+@section('title', 'Admin Dashboard')
 
 @section('content')
 <!-- Begin page -->
