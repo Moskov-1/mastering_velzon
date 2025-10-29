@@ -61,6 +61,25 @@ class User extends Authenticatable implements JWTSubject
         ];
     } 
 
+    public function getRole($slug)
+    {
+        // Get the roles array
+        $roles = self::roles();
+
+        // Convert the slug to lowercase
+        $slug = strtolower($slug);
+
+        // Check if the slug exists in the values of the roles array
+        if (in_array($slug, array_values($roles))) {
+            // Return the matching role key (ADMIN or USER)
+
+            return $slug;
+            // return array_search($slug, $roles);
+        }
+
+        // If not, return the default role (USER)
+        return $roles['USER'];
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
