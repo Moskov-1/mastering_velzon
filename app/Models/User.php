@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    use HasSpatial;
+    // use HasSpatial;
     /**
      * The attributes that are mass assignable.
      *

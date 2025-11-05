@@ -22,6 +22,14 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            "name"=> "vendor",
+            "email"=> "vendor@gmail.com",
+            "password" => bcrypt(env("DEFAULT_PASSWORD", '12345678')),
+            "role"=> env('DEFAULT_ADMIN_ROLE','vendor'),
+            "is_admin_user"=> 1,
+        ]);
+
+        User::create([
             "name"=> "user",
             "email"=> "user@gmail.com",
             "password" => bcrypt(env("DEFAULT_PASSWORD", '12345678')),
