@@ -46,24 +46,23 @@ class ProfileController extends Controller
                 ], 422);
             }
             if ($request->hasFile('avatar')) {
-
                 $path = fileUpload($request->file('avatar'), 'avatars/');
-                $profile = Profile::find($request->profile_id);
+                $user = auth()->user();
                 
-                if($profile->avatar){
-                    fileDelete($profile->avatar);
+                if($user->avatar){
+                    fileDelete($user->avatar);
                 }
 
                 if ($path !== null) {
-                    $profile->avatar = $path;
+                    $user->avatar = $path;
                 }
-                $profile->save();
+                $user->save();
             }
 
             return response()->json([
                 'success' => true,
                 'message'=> 'Avatar Uploaded successfully',
-                'url' => asset($profile->avatar)
+                'url' => asset($user->avatar)
             ], 200);
         }
         catch(\Exception $e){

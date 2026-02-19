@@ -20,9 +20,12 @@ Route::group(["prefix"=> "settings", "as"=> "settings."], function () {
         Route::put('update', 'update')->name('update');
     });
 
+    Route::put('update-maintainance-mode', [SystemController::class, 'maintainaceToggle'])->name('app-mode.update');
+
+
     Route::controller(MailController::class)->prefix('mail/')->name('mail.')->group(function(){
         Route::get('', 'index')->name('index');
-        Route::put('update', 'update')->name('update');
+        Route::patch('update', 'update')->name('update');
     });
 
     Route::controller(StripeSettingsController::class)->prefix('payments/')->name('payments.stripe.')->group(function(){

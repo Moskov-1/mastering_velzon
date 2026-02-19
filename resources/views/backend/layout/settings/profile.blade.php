@@ -24,7 +24,7 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="{{$profile->avatar ? asset($profile->avatar) : asset('assets/images/users/avatar-1.jpg')}}"
+                            <img src="{{$user->avatar ? asset($user->avatar) : asset('assets/images/users/avatar-1.jpg')}}"
                                 class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                 <input id="profile-img-file-input" type="file" class="profile-img-file-input avatar-input">

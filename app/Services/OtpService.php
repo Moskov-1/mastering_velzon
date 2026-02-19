@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 
 class OtpService
 {
@@ -23,13 +23,14 @@ class OtpService
     public function getTtl_min_time(){
         return floor($this->getTtl() / 60);
     }
-    public function generateOtp(string $key, int $ttl = null): string
+    public function generateOtp(string $key, ?int $ttl = null): string
     {
         if(!is_null($ttl))
             $this->setTtl($ttl);
         $otp = random_int(100000, 999999); // 6-digit OTP
-        if(!request()->is('api/*'))
-            Cache::put($key, $otp, $ttl); // store in cache for $ttl seconds
+                // if(!request()->is('api/*'))
+                //     Cache::put($key, $otp, $ttl); // store in cache for $ttl seconds
+        Cache::put($key, $otp, $ttl); // store in cache for $ttl seconds
         return $otp;
     }
 
@@ -47,6 +48,7 @@ class OtpService
     public function verifyOtp(string $key, string $otp): bool
     {
         $cachedOtp = Cache::get($key);
+        Log::alert('cachedOTp '.$cachedOtp);
         if ($cachedOtp && $cachedOtp == $otp) {
             Cache::forget($key); // remove OTP once verified
             return true;

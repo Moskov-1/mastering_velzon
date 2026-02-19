@@ -24,12 +24,14 @@ return new class extends Migration
             $table->string('password_reset_otp')->nullable();
             $table->string('password_reset_otp_is_verified')->default(false);
             $table->timestamp('password_reset_otp_expiry')->nullable();
-            
-            $table->geometry('location', subtype: 'point')->nullable();
-            $table->geometry('area', subtype: 'polygon')->nullable();
+            $table->string('timezone')->default('UTC');            
+
+            $table->tinyInteger('status')->default(1);
+            $table->string('avatar')->nullable();
+
+            // $table->enum('status', ['active','inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

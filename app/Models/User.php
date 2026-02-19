@@ -38,6 +38,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'role',
         'password',
+        'avatar',
     ];
 
     /** Get the identifier that will be stored in the subject claim of the JWT.
@@ -105,6 +106,14 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+
+    public function getAvatarAttribute($value): string | null
+    {
+        if (request()->is('api/*') && !empty($value)) {
+            return url($value);
+        }
+        return $value;
+    }
 
     public function profile(){
         return $this->hasOne(Profile::class);

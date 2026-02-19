@@ -10,40 +10,33 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
 
-class JWTMiddleware
+class JWTCookieMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    
     public function handle(Request $request, Closure $next): Response
-    {   
+    {
+       
         $cookieName = 'jwt_token';
         // $token = $request->cookie($cookieName);
-        
         $token = str_replace('Bearer ', '', $request->headers->get('Authorization'));
         
         if (! $token) {
-            Log::debug('inside not autthorized ', ['cookie name'=> $token, 'request', $request]);
-            return $next($request);
+            return response()->json(['error'=>'Token not provided'], 401);
         }
-        try {
+         try {
             $user = JWTAuth::setToken($token)->authenticate();
-            // auth()->loginUsingId($user->id);
         } catch (TokenExpiredException $e) {
-            return $next($request);
-            // return response()->json(['error'=>'Token expired'], 401);
+            return response()->json(['error'=>'Token expired'], 401);
         } catch (TokenInvalidException $e) {
-            return $next($request);
-            // return response()->json(['error'=>'Token invalid'], 401);
+            return response()->json(['error'=>'Token invalid'], 401);
         } catch (\Exception $e) {
-            return response()->json(['success' => false,'error'=>'Could not authenticate token'], 401);
+            return response()->json(['error'=>'Could not authenticate token'], 401);
         }
-        
+
+        $request->attributes->set('authenticated_user', $user);
         if($user){
             $request->attributes->set('authenticated_user', $user);
-
+            
             if(config('app.auth_setter')){
                 auth('api')->setUser($user);
             }
@@ -51,7 +44,7 @@ class JWTMiddleware
                 auth()->setUser($user);
             }
         }
-
+        
         return $next($request);
     }
 }

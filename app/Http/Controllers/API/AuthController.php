@@ -114,8 +114,7 @@ class AuthController extends BaseController
             $profile->is_customer = 1;
             
             if($request->hasFile('avatar')){
-                $profile->avatar = fileUpload($request->file('avatar'), 'avatars');
-                $user->avatar = $profile->avatar;
+                $user->avatar = fileUpload($request->file('avatar'), 'avatars');
                 $user->save();
             }
 
@@ -390,7 +389,7 @@ class AuthController extends BaseController
         $success['name'] = $user?->name;
         $success['email'] = $user?->email;
         $success['phone'] = $user?->profile?->phone;
-        $success['avatar'] = $user?->profile?->avatar;
+        $success['avatar'] = $user?->avatar;
         $success['role'] = $user?->role;
 
         if($user?->role == 'vendor'){
@@ -796,7 +795,7 @@ class AuthController extends BaseController
                 'id'=> $user->id,
                 'name'=> $user->name,
                 'email'=> $user->email,
-                'avatar'=> $user->profile->avatar,
+                'avatar'=> $user?->avatar,
                 'phone'=> $user->profile->phone,
                 'role'=> $user->id,
             ];
@@ -880,18 +879,18 @@ class AuthController extends BaseController
         }
 
         if ($request->filled('address')) {
-            $authenticatedUser->address = $request->address;
+            $authenticatedUser->profile->address = $request->address;
+            $authenticatedUser->profile->save();
         }
 
         // Avatar handle
         if ($request->hasFile('avatar')) {
             if ($authenticatedUser->avatar) {
-                fileDelete(public_path($authenticatedUser->avatar));
+                fileDelete($authenticatedUser->avatar);
             }
 
             $avatar = $request->file('avatar');
-            $avatarName = $authenticatedUser->id . '_avatar';
-            $avatarPath = fileUpload($avatar, 'profile/avatar', $avatarName);
+            $avatarPath = fileUpload($avatar, 'avatars/');
 
             $authenticatedUser->avatar = $avatarPath;
         }
@@ -902,7 +901,12 @@ class AuthController extends BaseController
             true,
             'Perfil actualizado correctamente',
             200,
-            $authenticatedUser->only(['name', 'email', 'avatar', 'address'])
+            [
+                'name' => $authenticatedUser->name,
+                'email' => $authenticatedUser->email,
+                'avatar' => $authenticatedUser->avatar,
+                'address' => $authenticatedUser->profile->address,
+            ]
         );
     }
 

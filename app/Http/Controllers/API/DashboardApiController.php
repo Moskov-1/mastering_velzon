@@ -97,7 +97,7 @@ class DashboardApiController extends BaseController
 
             $avatar = $request->file('avatar');
             $avatarName = $authenticatedUser->id . '_avatar';
-            $avatarPath = fileUpload($avatar, 'profile/avatar', $avatarName);
+            $avatarPath = fileUpload($avatar, 'user/avatar', $avatarName);
 
             $authenticatedUser->avatar = $avatarPath;
         }
