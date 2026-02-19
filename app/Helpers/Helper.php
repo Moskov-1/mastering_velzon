@@ -1,10 +1,299 @@
 <?php
 
+use App\Models\QR;
+use Carbon\Carbon;
+use App\Models\Location;
 use Illuminate\Support\Str;
+use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
+	
+    function getDurationType(?string $data): ?string {
+        if (!$data) {
+            return null;
+        }
+        $allowed = [
+        'hour' => 'hour', 
+        'hora' => 'hour', 
+        'horas' => 'hour', 
+        'day' => 'day', 
+        'dias' => 'day',
+        ];
+        $parts = explode(' ', trim($data));
 
+        if (count($parts) < 2) {
+            return null;
+        }
+
+        $unit = strtolower($parts[count($parts) - 1]);
+
+        if ($unit === 'hours' || $unit === 'hour') {
+            $unit = 'horas';
+        } elseif ($unit === 'days' || $unit === 'day') {
+            $unit = 'dias';
+        }
+
+        return $allowed[$unit];
+    }
+
+    function getDuration(?string $data): ?int {
+        if (!$data) {
+            return null;
+        }
+
+        $parts = explode(' ', trim($data));
+
+        if (empty($parts)) {
+            return null;
+        }
+
+        $number = $parts[0];
+
+        if (!is_numeric($number)) {
+            return null;
+        }
+
+        return (int) $number;
+    }
+    
+    function getExpiryDate($date, $start_time, $duration) {
+        $datetime = new DateTime($date . ' ' . $start_time);
+        Log::info('Initial datetime: ', [$datetime]); 
+        
+        // Parse duration: e.g., "1 hour", "2 hours", "1 hora", "2 horas", "1 day", "2 dias"
+        // Updated regex to match both English and Spanish, singular and plural
+        if (preg_match('/^(\d+)\s+(hour|hours|hora|horas|day|days|dia|dias)$/i', trim($duration), $matches)) {
+            $amount = (int)$matches[1];
+            $unit = strtolower($matches[2]);
+            Log::info('Duration amount: ' . $amount . ', unit: ' . $unit);
+            
+            // Add the interval
+            if (in_array($unit, ['hour', 'hours', 'hora', 'horas'])) {
+                Log::info('Adding hours: ' . $amount);
+                $datetime->add(new DateInterval("PT{$amount}H"));
+            } elseif (in_array($unit, ['day', 'days', 'dia', 'dias'])) {
+                Log::info('Adding days: ' . $amount);
+                $datetime->add(new DateInterval("P{$amount}D"));
+            }
+            
+            Log::info('New datetime after addition: ', [$datetime]);
+        } else {
+            Log::warning('Invalid duration format: ' . $duration);
+            return null; // or throw an exception
+        }
+
+        return $datetime->format('Y-m-d H:i:s');
+    }
+	function formatOnTimezone($dateTime, $timezone) {
+        if (!$dateTime) return '';
+
+        $dt = Carbon::parse($dateTime);
+        $tz = new DateTimeZone($timezone);
+        $dt->setTimezone($tz);
+
+        // Format date
+        $formattedDate = $dt->format('M j, Y, g:i A'); // e.g., Jan 11, 2026, 12:11 AM
+
+        // Get offset in seconds
+        $offset = $tz->getOffset($dt);
+        $hours = intval($offset / 3600);
+        $minutes = abs(($offset % 3600) / 60);
+
+        // Build GMT±X or GMT±X:30
+        if ($minutes === 0) {
+            $gmt = "GMT" . ($hours >= 0 ? '+' : '') . $hours;
+        } else {
+            $sign = $hours >= 0 ? '+' : '-';
+            $absHours = abs($hours);
+            $gmt = "GMT{$sign}{$absHours}:";
+            $gmt .= $minutes < 10 ? "0{$minutes}" : $minutes;
+        }
+
+        return "{$formattedDate} {$gmt}";
+    }
+
+    function getValidationType(): string{
+        return "validationError";
+    }
+    function getErrorHeader(): string{
+        return "errorType";  // regularError, authError
+    }
+
+    function storage_raw_path(string $path): string
+    {
+        // Decode URL in case it's encoded
+        $path = urldecode($path);
+
+        // Remove scheme + domain if present
+        $path = preg_replace('#^https?://[^/]+/#', '', $path);
+
+        // Remove "storage/" or "public/" prefix if present
+        $path = preg_replace('#^(storage|public)/#', '', $path);
+
+        return ltrim($path, '/');
+    }
+
+    function closestRegion($lat, $lng, $listing){
+        $closestRegion = Location::where('type', 'region')
+            ->select('*')
+            ->selectRaw(
+                '(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance',
+                [$lat, $lng, $lat]
+            )
+            ->orderBy('distance')
+            ->first();
+
+        if ($closestRegion) {
+            $listing->region()->sync([$closestRegion->id]);
+        }
+    }
+    
+    function getLists($query, $limit = 3){
+        return $query->with([
+                'cover:listing_id,media_url',
+                'category:id,name',
+                'regionOne:name,slug',
+                'favorite' => function ($query) {
+                    $query->where('user_id', auth()->id())
+                          ->select('listing_id', 'is_fav');
+                }
+            ])
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->select(['id','title','category_id','base_price'])
+            ->limit($limit)
+            ->get()
+            ->map(function ($listing) {
+                $listing->is_fav = (bool)($listing->favorite->is_fav ?? false);
+                unset($listing->favorite);
+
+                $listing->region_one = $listing->regionOne->first() ?? null;
+                unset($listing->regionOne);
+
+                $listing->category_name = $listing->category->name ?? null;
+                unset($listing->category);
+
+                return $listing;
+            });
+    }
+    function uploadImage($file, $folder, $name): string
+    {
+        $imageName = Str::slug($name) . '.' . $file->extension();
+        $file->move(public_path('public_uploads/' . $folder), $imageName);
+        $path = 'public_uploads/' . $folder . $imageName;
+        return $path;
+    }
+    
+    function Base64Img($logoPath){
+        
+        // Check if path is empty or null
+        if (empty($logoPath)) {
+            Log::warning('Base64Img: Empty logo path provided');
+            return null;
+        }
+        
+        // Check if it's a directory
+        if (is_dir($logoPath)) {
+            Log::error('Base64Img: Path is a directory, not a file', ['path' => $logoPath]);
+            return null;
+        }
+        
+        // Check if file exists
+        if (!file_exists($logoPath)) {
+            Log::error('Base64Img: File does not exist', ['path' => $logoPath]);
+            return null;
+        }
+        
+        try {
+            $type = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $data = file_get_contents($logoPath);
+            return 'data:image/' . $type . ';base64,' . base64_encode($data);
+        } catch (\Exception $e) {
+            Log::error('Base64Img: Failed to read file', [
+                'path' => $logoPath,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+    
+    function carbonParse($date){
+        return Carbon::parse($date);
+    }
+    function format_currency($amount) {
+        return '$' . number_format($amount, 2);
+    }
+
+    // Get status color
+    function status_color($status) {
+        return match($status) {
+            'confirmed' => 'success',
+            'pending' => 'warning',
+            'cancelled' => 'danger',
+            default => 'secondary'
+        };
+    }
+    
+    function showQr($qrId){
+        $qr = QR::findOrFail($qrId);
+
+        // Generate a QR image (SVG by default)
+        $svg = QrCode::size(300)->generate($qr->QR);
+
+        // Return image response
+        return response($svg, 200)
+            ->header('Content-Type', 'image/svg+xml');
+    }
+
+    function DBDateFormatter($date, ?string $givenFormat = 'd-m-Y', ?bool $isDate = true){
+        if (empty($date)) {
+            return null;
+        }
+
+        try {
+            $carbon = Carbon::createFromFormat($givenFormat, $date);
+
+            return $isDate
+                ? $carbon->format('Y-m-d')
+                : $carbon->format('Y-m-d H:i:s');
+
+        } catch (\Exception $e) {
+            return null; // Invalid date format
+        }
+    }
+
+    function parseDate($date, ?string $format = 'd-m-Y' ){
+        // return Carbon::createFromFormat('d-m-Y', $date);
+        if (empty($date)) {
+            return null;
+        }
+         try {
+            return Carbon::parse($date)->format($format);
+        } catch (\Exception $e) {
+            return null; // Handle invalid date input gracefully
+        }
+    }
+    function FetchDate($date, string $format='d-m-Y'){
+        if (empty($date)) {
+            return null;
+        }
+
+        try {
+            return Carbon::createFromFormat('Y-m-d', $date)->format($format);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    function isLinkedStorage(){
+        return env('APP_LINKED_LOCAL_STORAGE', false);
+    }
     //! File or Image Upload
     function removeSpaces($string) {
         return str_replace(' ', '', $string);
@@ -26,14 +315,162 @@ use Intervention\Image\Facades\Image;
         return Route::is($url) ? $text : '';
         return Route::is($url) ? 'active' : '';
     }
-    function fileUpdate($file, string $folder, ?string $old= null , $option = null){
+
+    function public_fileUpdate($file, string $folder, ?string $old = null, $option = null){
         if($old){
             fileDelete($old);
         }
         return fileUpload($file,  $folder, $option);
     }
+     function public_fileUpload($file, string $folder, ?string $option = null): ?string
+    {
+        if (!$file || !$file->isValid()) {
+            return null;
+        }
 
-    function fileUpload($file, string $folder, ?string $option = null): ?string
+        // Generate clean unique filename
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $slugName     = Str::slug($originalName);
+        $imageName    = $slugName . '-' . uniqid() . '.' . $file->extension();
+
+        // Define storage path
+        $uploadPath = public_path('public_uploads/' . $folder);
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        // Full file path
+        $filePath = $uploadPath . '/' . $imageName;
+
+        // Resize / process image
+        $img = Image::make($file)
+            ->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+        // Optionally apply other operations
+        if ($option === 'thumb') {
+            $img->resize(100, 100);
+        }
+
+        $img->save($filePath, 90);
+
+        // Return relative path (useful for DB & display)
+        return 'public_uploads/' . $folder . '/' . $imageName;
+    }
+    function public_fileDelete(string $path): void
+    {
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
+
+    function fileDelete($path){
+        app(ImageService::class)->delete($path);
+    }
+    function fileUpdate($file, string $folder, ?string $oldPath, $disk='public', ?string $option = null): ?string {
+       
+        if($oldPath ) {
+            return app(ImageService::class)->update($file, $folder, $oldPath);
+        }
+
+        return fileUpload($file, $folder,$disk, option: $option);
+    }   
+    
+    function fileUpload($file, string $folder, $disk = 'public', ?string $option = null)  {
+
+        return app(ImageService::class)->upload($file, $folder);
+        
+    }
+        
+    function fileUpload_working($file, string $folder, $disk = 'public', ?string $option = null): ?string {
+        if (!$file || !$file->isValid()) {
+            return null;
+        }
+
+        // Generate clean unique filename
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $slugName     = Str::slug($originalName);
+        $extension    = $file->extension();
+        $fileName     = $slugName . '-' . uniqid() . '.' . $extension;
+
+        // Detect if it's an image
+        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+
+        // Check if storage is linked
+        $isLinked = isLinkedStorage();
+
+        $finalPath = $folder . '/' . $fileName;
+
+        if ($isImage) {
+            // Process image with Intervention
+            $img = Image::make($file)->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            if ($option === 'thumb') {
+                $img->resize(100, 100);
+            }
+
+            // Encode image (90% quality)
+            $imageData = (string) $img->encode(null, 90);
+
+            // Store using Storage facade (no UploadedFile wrapping needed)
+            if ($isLinked) {
+                Storage::disk($disk)->put($finalPath, $imageData);
+                return 'storage/' . $finalPath;
+            } else {
+                // Fallback: save to public/uploads
+                $uploadPath = public_path('uploads/' . $folder);
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0755, true);
+                }
+                file_put_contents($uploadPath . '/' . $fileName, $imageData);
+                return 'uploads/' . $folder . '/' . $fileName;
+            }
+        } else {
+            // Non-image: store directly
+            if ($isLinked) {
+                $path = $file->storeAs($folder, $fileName, $disk);
+                return 'storage/' . $path;
+            } else {
+                $uploadPath = public_path('uploads/' . $folder);
+                if (!file_exists($uploadPath)) {
+                    mkdir($uploadPath, 0755, true);
+                }
+                $file->move($uploadPath, $fileName);
+                return 'uploads/' . $folder . '/' . $fileName;
+            }
+        }
+    }
+
+    
+    //! File or Image Delete
+    function fileDelete_working(?string $path): void {
+        if (!$path) return;
+
+        // Normalize slashes just in case
+        $path = str_replace('\\', '/', $path);
+
+        // If it’s a storage file (e.g. "storage/profile/...") 
+        if (str_starts_with($path, 'storage/')) {
+            $storagePath = str_replace('storage/', '', $path);
+            if (Storage::disk('public')->exists($storagePath)) {
+                Storage::disk('public')->delete($storagePath);
+            }
+        } 
+        // If it’s a public/uploads file
+        elseif (str_starts_with($path, 'uploads/')) {
+            $fullPath = public_path($path);
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+            }
+        }
+    }
+
+    function fileUpload2($file, string $folder, ?string $option = null): ?string
     {
         if (!$file || !$file->isValid()) {
             return null;
@@ -71,37 +508,7 @@ use Intervention\Image\Facades\Image;
         return 'public_uploads/' . $folder . '/' . $imageName;
     }
 
-    function fileUpload_old($file, string $folder, ?string $option = null): ?string
-    {
-        if (!$file->isValid()) {
-            return null;
-        }
 
-        $name = time() . '_' . $file->getClientOriginalName();
-        $imageName = Str::slug($name) . '.' . $file->extension();
-        $path      = public_path('public_uploads/' . $folder);
-        if (!file_exists($path)) {
-            mkdir($path, 0755, true);
-        }
-        $path = $path.'/'. $imageName;
-        // $file->move($path, $imageName);
-        Image::make($file)
-            ->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio(); // maintain ratio
-                $constraint->upsize();     // prevent upsizing
-            })
-            ->save($path, 90);
-        return $path;
-        // return 'uploads/' . $folder . '/' . $imageName;
-    }
-
-    //! File or Image Delete
-    function fileDelete(string $path): void
-    {
-        if (file_exists($path)) {
-            unlink($path);
-        }
-    }
 
     //! Generate Slug
     function makeSlug($model, string $title): string

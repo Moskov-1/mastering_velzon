@@ -10,9 +10,6 @@ use App\Http\Controllers\Web\Backend\SiteController;
 use App\Http\Controllers\Web\Backend\ProjectController;
 
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\TestMail;
-
 Route::group([ 'as'=>'backend.'], function () {
 
     require_once __DIR__.'/queue.php';
