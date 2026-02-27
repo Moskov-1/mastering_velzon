@@ -11,18 +11,9 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\Objects\Polygon;
-use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class User extends Authenticatable implements JWTSubject
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-    // use HasSpatial;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     
     protected static function booted()
     {
@@ -33,13 +24,7 @@ class User extends Authenticatable implements JWTSubject
         });
     }
     
-    protected $fillable = [
-        'name',
-        'email',
-        'role',
-        'password',
-        'avatar',
-    ];
+    protected $guarded = ['id'];
 
     /** Get the identifier that will be stored in the subject claim of the JWT.
      * @return mixed */
@@ -49,10 +34,8 @@ class User extends Authenticatable implements JWTSubject
 
     /** Return a key value array, containing any custom claims to be added to the JWT.
      * @return array */
-    public function getJWTCustomClaims()
-    {
-        return [
-        ];
+    public function getJWTCustomClaims(){
+        return [];
     }
 
     public static function roles(){
@@ -81,35 +64,25 @@ class User extends Authenticatable implements JWTSubject
         // If not, return the default role (USER)
         return $roles['USER'];
     }
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'location' => Point::class,
-            'area' => Polygon::class,
         ];
     }
 
 
     public function getAvatarAttribute($value): string | null
     {
-        if (request()->is('api/*') && !empty($value)) {
+        if (request()->is('api/*') && request()->method() === 'GET' && !empty($value)) {
             return url($value);
         }
         return $value;

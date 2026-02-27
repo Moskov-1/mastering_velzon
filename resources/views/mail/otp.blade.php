@@ -1,248 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your One-Time Password</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .logo {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-        
-        h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        .message {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: #555;
-        }
-        
-        .otp-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-            border: 1px solid #e9ecef;
-        }
-        
-        .otp-label {
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        .otp-code {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .otp-digits {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .digit {
-            width: 50px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e0e0e0;
-        }
-        
-        .copy-btn {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 117, 252, 0.3);
-        }
-        
-        .copy-btn.copied {
-            background: linear-gradient(135deg, #20bf6b 0%, #01baef 100%);
-        }
-        
-        .validity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #6c757d;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        .validity i {
-            color: #20bf6b;
-        }
-        
-        .footer {
-            padding: 20px 40px;
-            background: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            text-align: center;
-            color: #6c757d;
-            font-size: 14px;
-        }
-        
-        .security-note {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        
-        .security-note i {
-            color: #6a11cb;
-        }
-        
-        @media (max-width: 600px) {
-            .content {
-                padding: 30px 20px;
-            }
-            
-            .otp-code {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .otp-digits {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .digit {
-                width: 40px;
-                height: 50px;
-                font-size: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Su Contraseña de un Solo Uso</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <h1>One-Time Password</h1>
-            <p class="subtitle">Your secure verification code</p>
-        </div>
+
+<body style="margin: 0; padding: 20px; background-color: #f3f7f5; color: #14382e; font-family: Arial, sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f3f7f5;">
+  <tr>
+    <td align="center" style="padding: 20px 0;">
+      <table width="520" cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 520px; background-color: #ffffff; border-radius: 16px; border: 1px solid #dfeae5; box-shadow: 0 14px 30px rgba(20,56,46,0.10);">
         
-        <div class="content">
-            <p class="message">
-                Use the following One-Time Password (OTP) to complete your verification process. 
-                This code is valid for a limited time only.
-            </p>
-            
-            <div style="font-family: Arial, sans-serif; color: #333; text-align:center;">
-                <h2 style="margin-bottom: 15px; font-size: 20px;">Your OTP Code</h2>
-                
-                <div style="
-                    display: inline-block;
-                    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-                    color: #fff;
-                    padding: 20px 35px;
-                    border-radius: 12px;
-                    font-size: 28px;
-                    font-weight: bold;
-                    letter-spacing: 10px;
-                    box-shadow: 0 4px 15px rgba(37, 117, 252, 0.3);
-                ">
-                    {{ implode(' ', str_split($otp)) }}
-                </div>
-                
-                <p style="margin-top: 20px; color: #6c757d;">
-                    This OTP is valid for <strong>{{$ttl}} minutes</strong>.
-                </p>
-            </div>
-
-
-            
-            <p class="message">
-                For security reasons, please do not share this code with anyone. 
-                If you did not request this code, please ignore this message.
-            </p>
-        </div>
+        <!-- Encabezado -->
+        <tr>
+          <td style="text-align: center; padding: 22px 18px 20px; background-color: #6eaa89; color: #ffffff; position: relative;">
+            <h1 style="margin: 0; font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Contraseña de un Solo Uso</h1>
+            <p style="margin: 0; font-size: 13px; color: #ffffff; opacity: 0.95;">Su código seguro de verificación</p>
+          </td>
+        </tr>
         
-        <div class="footer">
-            <p>This is an automated message. Please do not reply to this email.</p>
-            <div class="security-note">
-                <i class="fas fa-lock"></i>
-                <span>Secured with end-to-end encryption</span>
-            </div>
-        </div>
-    </div>
+        <!-- Separador -->
+        <tr>
+          <td style="height: 4px; background-color: #e8665d; padding: 0; margin: 0;"></td>
+        </tr>
 
+        <!-- Contenido -->
+        <tr>
+          <td style="padding: 22px 20px; background-color: #ffffff;">
+            <p style="margin: 0 0 18px; font-size: 14px; line-height: 1.6; color: #14382e;">
+              Utilice la siguiente contraseña de un solo uso (OTP) para completar su proceso de verificación.
+              Este código es válido solo por un tiempo limitado.
+            </p>
 
+            <!-- Recuadro del OTP -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color: #f7fbf9; border: 1px solid #dfeae5; border-radius: 14px; padding: 20px; text-align: center; margin: 18px 0;">
+                  <h2 style="margin: 0 0 12px; font-size: 15px; font-weight: 800; color: #14382e;">Su código OTP</h2>
+
+                  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td align="center">
+                        <div style="display: inline-block; background-color: #e8665d; color: #ffffff; padding: 16px 28px; border-radius: 12px; font-size: 26px; font-weight: 900; letter-spacing: 0;">
+                          {{ $otp }}
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <p style="margin: 14px 0 0; font-size: 13px; color: #5f7f73;">
+                    Este OTP es válido durante <strong>{{ $ttl }} minutos</strong>.
+                  </p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin: 18px 0 0; font-size: 14px; line-height: 1.6; color: #14382e;">
+              Por razones de seguridad, no comparta este código con nadie.
+              Si usted no solicitó este código, por favor ignore este mensaje.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Pie de página -->
+        <tr>
+          <td style="background-color: #f7fbf9; border-top: 1px solid #dfeae5; padding: 16px 18px; text-align: center; font-size: 12px; color: #5f7f73;">
+            <p style="margin: 0; font-size: 12px; color: #5f7f73;">Este es un mensaje automático. Por favor, no responda a este correo electrónico.</p>
+            <div style="margin: 6px 0 0; font-weight: 700; color: #6eaa89; font-size: 12px;">Protegido con cifrado de extremo a extremo</div>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
 </body>
 </html>

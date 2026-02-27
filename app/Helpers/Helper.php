@@ -6,13 +6,11 @@ use App\Models\Location;
 use Illuminate\Support\Str;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
 	
     function getDurationType(?string $data): ?string {
         if (!$data) {
@@ -139,56 +137,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         return ltrim($path, '/');
     }
 
-    function closestRegion($lat, $lng, $listing){
-        $closestRegion = Location::where('type', 'region')
-            ->select('*')
-            ->selectRaw(
-                '(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance',
-                [$lat, $lng, $lat]
-            )
-            ->orderBy('distance')
-            ->first();
-
-        if ($closestRegion) {
-            $listing->region()->sync([$closestRegion->id]);
-        }
-    }
-    
-    function getLists($query, $limit = 3){
-        return $query->with([
-                'cover:listing_id,media_url',
-                'category:id,name',
-                'regionOne:name,slug',
-                'favorite' => function ($query) {
-                    $query->where('user_id', auth()->id())
-                          ->select('listing_id', 'is_fav');
-                }
-            ])
-            ->withCount('reviews')
-            ->withAvg('reviews', 'rating')
-            ->select(['id','title','category_id','base_price'])
-            ->limit($limit)
-            ->get()
-            ->map(function ($listing) {
-                $listing->is_fav = (bool)($listing->favorite->is_fav ?? false);
-                unset($listing->favorite);
-
-                $listing->region_one = $listing->regionOne->first() ?? null;
-                unset($listing->regionOne);
-
-                $listing->category_name = $listing->category->name ?? null;
-                unset($listing->category);
-
-                return $listing;
-            });
-    }
-    function uploadImage($file, $folder, $name): string
-    {
-        $imageName = Str::slug($name) . '.' . $file->extension();
-        $file->move(public_path('public_uploads/' . $folder), $imageName);
-        $path = 'public_uploads/' . $folder . $imageName;
-        return $path;
-    }
     
     function Base64Img($logoPath){
         
@@ -223,12 +171,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         }
     }
     
-    function carbonParse($date){
-        return Carbon::parse($date);
-    }
-    function format_currency($amount) {
-        return '$' . number_format($amount, 2);
-    }
 
     // Get status color
     function status_color($status) {
@@ -240,18 +182,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         };
     }
     
-    function showQr($qrId){
-        $qr = QR::findOrFail($qrId);
 
-        // Generate a QR image (SVG by default)
-        $svg = QrCode::size(300)->generate($qr->QR);
-
-        // Return image response
-        return response($svg, 200)
-            ->header('Content-Type', 'image/svg+xml');
-    }
-
-    function DBDateFormatter($date, ?string $givenFormat = 'd-m-Y', ?bool $isDate = true){
+    function timeFormatter($date, ?string $givenFormat = 'd-m-Y', ?bool $onlyDate = true){
         if (empty($date)) {
             return null;
         }
@@ -259,7 +191,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         try {
             $carbon = Carbon::createFromFormat($givenFormat, $date);
 
-            return $isDate
+            return $onlyDate
                 ? $carbon->format('Y-m-d')
                 : $carbon->format('Y-m-d H:i:s');
 
@@ -268,28 +200,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         }
     }
 
-    function parseDate($date, ?string $format = 'd-m-Y' ){
-        // return Carbon::createFromFormat('d-m-Y', $date);
-        if (empty($date)) {
-            return null;
-        }
-         try {
-            return Carbon::parse($date)->format($format);
-        } catch (\Exception $e) {
-            return null; // Handle invalid date input gracefully
-        }
-    }
-    function FetchDate($date, string $format='d-m-Y'){
-        if (empty($date)) {
-            return null;
-        }
-
-        try {
-            return Carbon::createFromFormat('Y-m-d', $date)->format($format);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
 
     function isLinkedStorage(){
         return env('APP_LINKED_LOCAL_STORAGE', false);
@@ -384,131 +294,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
         
     }
         
-    function fileUpload_working($file, string $folder, $disk = 'public', ?string $option = null): ?string {
-        if (!$file || !$file->isValid()) {
-            return null;
-        }
-
-        // Generate clean unique filename
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $slugName     = Str::slug($originalName);
-        $extension    = $file->extension();
-        $fileName     = $slugName . '-' . uniqid() . '.' . $extension;
-
-        // Detect if it's an image
-        $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
-
-        // Check if storage is linked
-        $isLinked = isLinkedStorage();
-
-        $finalPath = $folder . '/' . $fileName;
-
-        if ($isImage) {
-            // Process image with Intervention
-            $img = Image::make($file)->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-            if ($option === 'thumb') {
-                $img->resize(100, 100);
-            }
-
-            // Encode image (90% quality)
-            $imageData = (string) $img->encode(null, 90);
-
-            // Store using Storage facade (no UploadedFile wrapping needed)
-            if ($isLinked) {
-                Storage::disk($disk)->put($finalPath, $imageData);
-                return 'storage/' . $finalPath;
-            } else {
-                // Fallback: save to public/uploads
-                $uploadPath = public_path('uploads/' . $folder);
-                if (!file_exists($uploadPath)) {
-                    mkdir($uploadPath, 0755, true);
-                }
-                file_put_contents($uploadPath . '/' . $fileName, $imageData);
-                return 'uploads/' . $folder . '/' . $fileName;
-            }
-        } else {
-            // Non-image: store directly
-            if ($isLinked) {
-                $path = $file->storeAs($folder, $fileName, $disk);
-                return 'storage/' . $path;
-            } else {
-                $uploadPath = public_path('uploads/' . $folder);
-                if (!file_exists($uploadPath)) {
-                    mkdir($uploadPath, 0755, true);
-                }
-                $file->move($uploadPath, $fileName);
-                return 'uploads/' . $folder . '/' . $fileName;
-            }
-        }
-    }
-
+ 
     
-    //! File or Image Delete
-    function fileDelete_working(?string $path): void {
-        if (!$path) return;
-
-        // Normalize slashes just in case
-        $path = str_replace('\\', '/', $path);
-
-        // If it’s a storage file (e.g. "storage/profile/...") 
-        if (str_starts_with($path, 'storage/')) {
-            $storagePath = str_replace('storage/', '', $path);
-            if (Storage::disk('public')->exists($storagePath)) {
-                Storage::disk('public')->delete($storagePath);
-            }
-        } 
-        // If it’s a public/uploads file
-        elseif (str_starts_with($path, 'uploads/')) {
-            $fullPath = public_path($path);
-            if (file_exists($fullPath)) {
-                unlink($fullPath);
-            }
-        }
-    }
-
-    function fileUpload2($file, string $folder, ?string $option = null): ?string
-    {
-        if (!$file || !$file->isValid()) {
-            return null;
-        }
-
-        // Generate clean unique filename
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $slugName     = Str::slug($originalName);
-        $imageName    = $slugName . '-' . uniqid() . '.' . $file->extension();
-
-        // Define storage path
-        $uploadPath = public_path('public_uploads/' . $folder);
-        if (!file_exists($uploadPath)) {
-            mkdir($uploadPath, 0755, true);
-        }
-
-        // Full file path
-        $filePath = $uploadPath . '/' . $imageName;
-
-        // Resize / process image
-        $img = Image::make($file)
-            ->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-        // Optionally apply other operations
-        if ($option === 'thumb') {
-            $img->resize(100, 100);
-        }
-
-        $img->save($filePath, 90);
-
-        // Return relative path (useful for DB & display)
-        return 'public_uploads/' . $folder . '/' . $imageName;
-    }
-
-
 
     //! Generate Slug
     function makeSlug($model, string $title): string
@@ -522,12 +309,12 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
     }
 
     //! JSON Response
-    function jsonResponse(bool $status, string $message, int $code, $data = null, bool $paginate = false, $paginateData = null): JsonResponse
+    function jsonResponse(bool $success, string $message, int $code, $data = null, bool $paginate = false, $paginateData = null): JsonResponse
     {
         $response = [
-            'status'  => $status,
+            'success'  => $success,
             'message' => $message,
-            'code'    => $code,
+            'status_code'    => $code,
         ];
 
         if ($paginate && !empty($paginateData)) {
@@ -570,9 +357,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCodeBuilder;
     function jsonErrorResponse(string $message, int $code = 400, array $errors = []): JsonResponse
     {
         $response = [
-            'status'  => false,
+            'success'  => false,
             'message' => $message,
-            'code'    => $code,
+            'status_code'    => $code,
             'errors'  => $errors,
         ];
         return response()->json($response, $code);
