@@ -2,32 +2,19 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Application Name
-    |--------------------------------------------------------------------------
-    |
-    | This value is the name of your application, which will be used when the
-    | framework needs to place the application's name in a notification or
-    | other UI elements where an application name needs to be displayed.
-    |
-    */
+   
 
     'name' => env('APP_NAME', 'Laravel'),
+
+    'auth_setter' => env('AUTH_SETTER',false),
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+
     
     'force_logout_on_restart' => env('FORCE_LOGOUT_ON_RESTART', false),
     'session_key' => env('APP_SESSION_KEY', 'dev_1'),
-    /*
-    |--------------------------------------------------------------------------
-    | Application Environment
-    |--------------------------------------------------------------------------
-    |
-    | This value determines the "environment" your application is currently
-    | running in. This may determine how you prefer to configure various
-    | services the application utilizes. Set this in your ".env" file.
-    |
-    */
+ 
 
+    
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -67,7 +54,8 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Dhaka',
+    // 'timezone' => 'Asia/Dhaka',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------

@@ -15,23 +15,32 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->boolean('is_admin_user')->default(false);
+            $table->string('avatar')->nullable();
+            
+
             $table->string('role')->default(env('DEFAULT_USER_ROLE', 'user'));
-            $table->string('google_id')->nullable()->unique();
-            $table->tinyInteger('status')->default(1);
+            $table->boolean('is_admin_user')->default(false);
+            
+            
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
+            $table->string('google_id')->nullable()->unique();
+            
+            // misc
+            $table->string('password');
+
             $table->string('password_reset_otp')->nullable();
             $table->string('password_reset_otp_is_verified')->default(false);
             $table->timestamp('password_reset_otp_expiry')->nullable();
-            $table->string('timezone')->default('UTC');            
 
+            $table->string('timezone')->default('UTC');
+            
             $table->tinyInteger('status')->default(1);
-            $table->string('avatar')->nullable();
 
-            // $table->enum('status', ['active','inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
+
+            // $table->softDeletes();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
