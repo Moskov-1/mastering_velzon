@@ -43,13 +43,7 @@ class JWTMiddleware
         
         if($user){
             $request->attributes->set('authenticated_user', $user);
-
-            if(config('app.auth_setter')){
-                auth('api')->setUser($user);
-            }
-            else{
-                auth()->setUser($user);
-            }
+            auth('api')->setUser($user);
         }
 
         return $next($request);
