@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\QR;
-use Carbon\Carbon;
 use App\Models\Location;
-use Illuminate\Support\Str;
-use App\Services\ImageService;
+use App\Models\QR;
+use App\Services\ImageServiceV2;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 	
     function getDurationType(?string $data): ?string {
@@ -226,63 +226,15 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
         return Route::is($url) ? 'active' : '';
     }
 
-    function public_fileUpdate($file, string $folder, ?string $old = null, $option = null){
-        if($old){
-            fileDelete($old);
-        }
-        return fileUpload($file,  $folder, $option);
-    }
-     function public_fileUpload($file, string $folder, ?string $option = null): ?string
-    {
-        if (!$file || !$file->isValid()) {
-            return null;
-        }
-
-        // Generate clean unique filename
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $slugName     = Str::slug($originalName);
-        $imageName    = $slugName . '-' . uniqid() . '.' . $file->extension();
-
-        // Define storage path
-        $uploadPath = public_path('public_uploads/' . $folder);
-        if (!file_exists($uploadPath)) {
-            mkdir($uploadPath, 0755, true);
-        }
-
-        // Full file path
-        $filePath = $uploadPath . '/' . $imageName;
-
-        // Resize / process image
-        $img = Image::make($file)
-            ->resize(200, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-        // Optionally apply other operations
-        if ($option === 'thumb') {
-            $img->resize(100, 100);
-        }
-
-        $img->save($filePath, 90);
-
-        // Return relative path (useful for DB & display)
-        return 'public_uploads/' . $folder . '/' . $imageName;
-    }
-    function public_fileDelete(string $path): void
-    {
-        if (file_exists($path)) {
-            unlink($path);
-        }
-    }
+    
 
     function fileDelete($path){
-        app(ImageService::class)->delete($path);
+        app(ImageServiceV2::class)->delete($path);
     }
     function fileUpdate($file, string $folder, ?string $oldPath, $disk='public', ?string $option = null): ?string {
        
         if($oldPath ) {
-            return app(ImageService::class)->update($file, $folder, $oldPath);
+            return app(ImageServiceV2::class)->update($file, $folder, $oldPath);
         }
 
         return fileUpload($file, $folder,$disk, option: $option);
@@ -290,7 +242,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
     
     function fileUpload($file, string $folder, $disk = 'public', ?string $option = null)  {
 
-        return app(ImageService::class)->upload($file, $folder);
+        return app(ImageServiceV2::class)->upload($file, $folder);
         
     }
         
