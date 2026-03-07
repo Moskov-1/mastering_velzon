@@ -65,7 +65,37 @@
         });
 
         drEvent.on('dropify.afterClear', function(event, element){
-            alert('File deleted');
+            /*
+             * when a user clears the input we trigger a delete request to the
+             * server. the controller will remove the physical file and update
+             * the setting record. we send the field name so the backend knows
+             * which column to clear.
+             */
+            let fieldName = $(element.element).attr('name');
+            // only attempt if there was a filepath associated
+            let existingPath = $(element.element).data('filepath');
+            if (!existingPath) {
+                return;
+            }
+
+            fetch("{{ route('backend.settings.system.file.delete') }}", {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ field: fieldName })
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    toastr.success('File removed successfully');
+                } else if (data.error) {
+                    toastr.error(data.error);
+                }
+            }).catch(err => {
+                console.error('delete error', err);
+                toastr.error('Unable to delete file');
+            });
         });
     });
 </script>

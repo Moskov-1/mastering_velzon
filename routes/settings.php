@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Event\Telemetry\System;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Backend\Settings\MailController;
 use App\Http\Controllers\Web\Backend\Settings\SystemController;
@@ -18,6 +17,8 @@ Route::group(["prefix"=> "settings", "as"=> "settings."], function () {
     Route::controller(SystemController::class)->prefix('system/')->name('system.')->group(function(){
         Route::get('', 'index')->name('index');
         Route::put('update', 'update')->name('update');
+        // when a file is cleared via dropify we hit this route to remove it
+        Route::delete('file-delete', 'deleteFile')->name('file.delete');
     });
 
     Route::put('update-maintainance-mode', [SystemController::class, 'maintainaceToggle'])->name('app-mode.update');

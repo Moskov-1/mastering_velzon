@@ -45,14 +45,7 @@
                         <span data-key="t-chats">Home</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link  {{getPageStatus('backend.chats.*', 'collapsed active')}}"
-                        href="{{ route('backend.chats.index') }}" role="button">
-                       <i class="ri-chat-smile-2-line"></i>
-
-                        <span data-key="t-chats">Chats</span>
-                    </a>
-                </li>
+                
                 <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     {{-- <a class="nav-link menu-link {{getPageStatus('backend.feature.*', 'collapsed active')}}" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">  --}}

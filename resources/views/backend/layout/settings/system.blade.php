@@ -44,7 +44,8 @@
                                             <input type="file" name="logo"
                                                 class="dropify @error('logo') is-invalid @enderror" data-height="100"
                                                 @if(!empty($settings->logo))
-                                                data-default-file="{{ asset($settings->logo) }}" @endif>
+                                                data-default-file="{{ asset($settings->logo) }}"
+                                                data-filepath="{{ $settings->logo }}" @endif>
                                             @error('logo')
                                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                                             @enderror
@@ -56,7 +57,8 @@
                                             <input type="file" name="mini_logo"
                                                 class="dropify @error('mini_logo') is-invalid @enderror" data-height="100"
                                                 @if(!empty($settings->mini_logo))
-                                                data-default-file="{{ asset($settings->mini_logo) }}" @endif>
+                                                data-default-file="{{ asset($settings->mini_logo) }}"
+                                                data-filepath="{{ $settings->mini_logo }}" @endif>
                                             @error('mini_logo')
                                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                                             @enderror
@@ -68,7 +70,8 @@
                                             <input type="file" name="icon"
                                                 class="dropify @error('icon') is-invalid @enderror" data-height="100"
                                                 @if(!empty($settings->icon))
-                                                data-default-file="{{ asset($settings->icon) }}" @endif>
+                                                data-default-file="{{ asset($settings->icon) }}"
+                                                data-filepath="{{ $settings->icon }}" @endif>
                                             @error('icon')
                                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                                             @enderror
