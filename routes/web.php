@@ -15,6 +15,7 @@ Route::get('lang/{locale}', function($locale) {
     return back();
 })->name('lang.switch');
 
+
 Route::get('/clear-cache', function(){
     return view('backend.partials.cache');
 })->name('backend.settings.get.clear-cache.page');

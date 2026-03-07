@@ -12,7 +12,6 @@ use App\Http\Controllers\Web\Backend\ProjectController;
 
 Route::group([ 'as'=>'backend.'], function () {
 
-    require_once __DIR__.'/queue.php';
 
     Route::get('/', [SiteController::class,'index'])->name('dashboard.index');
     Route::resource('project', ProjectController::class)->except(['show']);

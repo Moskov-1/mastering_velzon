@@ -62,7 +62,7 @@
                                     {{-- href="{{ route('backend.feature.listings.index') }}"  --}}
                                     class="nav-link {{getPageStatus('backend.feature.listings.*', 'active')}}" role="button" aria-expanded="false"
                                     aria-controls="sidebarProjects" data-key="t-projects">
-                                    Listings
+                                    Services
                                 </a>
                             </li> 
                             
@@ -71,7 +71,7 @@
                                     class="nav-link {{ getPageStatus('backend.feature.age_groups.*', 'active') }}"
                                     data-bs-toggle="collapse" role="button" aria-expanded="false"
                                     aria-controls="sidebarAgeGroups" data-key="t-age-groups">
-                                    Categories By Age Group
+                                    Service Categories
                                 </a>
                                 <div class="collapse menu-dropdown {{ getPageStatus('backend.feature.age_groups.*', 'show') }}"
                                     id="sidebarAgeGroups">
@@ -87,15 +87,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item">
-                                <a 
-                                {{-- href="{{ route('backend.feature.taxes.index') }}"  --}}
-                                class="nav-link {{getPageStatus('backend.feature.taxes.*', 'active')}}" role="button"
-                                    aria-expanded="false" aria-controls="sidebarTaxes" data-key="t-taxes">
-                                    Taxes
-                                </a>
-
-                            </li>
+                            
                         </ul>
                     </div>
                 </li>
