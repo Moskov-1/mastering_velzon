@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
             
 
-            $table->string('role')->default(env('DEFAULT_USER_ROLE', 'user'));
+            // $table->string('role')->default(env('DEFAULT_USER_ROLE', 'user'));
+            $table->enum('role', ['user', 'guest', 'admin'])->default('user');
             $table->boolean('is_admin_user')->default(false);
             
             
@@ -29,7 +31,7 @@ return new class extends Migration
             $table->string('password');
 
             $table->string('password_reset_otp')->nullable();
-            $table->string('password_reset_otp_is_verified')->default(false);
+            $table->boolean('password_reset_otp_is_verified')->default(false);
             $table->timestamp('password_reset_otp_expiry')->nullable();
 
             $table->string('timezone')->default('UTC');
