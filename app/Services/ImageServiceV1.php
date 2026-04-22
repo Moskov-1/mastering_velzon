@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Request;
 
-class ImageService
+class ImageServiceV1
 {
     protected string $disk='public';
 
