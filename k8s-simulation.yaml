@@ -1,0 +1,80 @@
+# 1. Database Service (The "One DB")
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+---
+# 2. Database Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "laravel"
+        ports:
+        - containerPort: 3306
+---
+# 3. Application Deployment (Scalable)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-app
+spec:
+  replicas: 3 # <--- This simulates your scaling!
+  selector:
+    matchLabels:
+      app: laravel
+  template:
+    metadata:
+      labels:
+        app: laravel
+    spec:
+      containers:
+      - name: app
+        image: my-laravel-app:latest # Replace with your actual image name
+        env:
+        - name: DB_HOST
+          value: "mysql-service" # Connecting to the DB service name
+        - name: DB_CONNECTION
+          value: "mysql"
+        - name: DB_DATABASE
+          value: "laravel"
+        - name: DB_USERNAME
+          value: "root"
+        - name: DB_PASSWORD
+          value: "root"
+        ports:
+        - containerPort: 80
+---
+# 4. Application Service (The "Load Balancer")
+apiVersion: v1
+kind: Service
+metadata:
+  name: laravel-service
+spec:
+  type: LoadBalancer # <--- This simulates the AWS ALB
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: laravel
